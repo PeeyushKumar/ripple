@@ -1,0 +1,48 @@
+html {
+  overflow: hidden;
+}
+
+.tile {
+  width: 5vw;
+  height: 5vw;
+  margin: -2px 0px;
+  border: 1px solid #fff;
+  border-radius: 15px;
+}
+
+.tile-cyan {
+  background-color: rgb(122, 193, 255);
+  animation-name: animation1;
+  animation-duration: 1s;
+}
+
+.tile-cyan:hover {
+  background-color: rgb(78, 172, 255);
+}
+
+.tile-red {
+  background-color: rgb(255, 67, 67);
+  animation-name: animation2;
+  animation-duration: 1s;
+}
+
+.tile-red:hover {
+  background-color: rgb(255, 45, 45);
+}
+
+.board {
+  width: 100%;
+  margin: auto;
+}
+
+@keyframes animation1 {
+  0%   {border-radius: 15px;}
+  50%  {border-radius: 40px;}
+  100% {border-radius: 15px;}
+}
+
+@keyframes animation2 {
+  0%   {border-radius: 15px;}
+  50%  {border-radius: 40px;}
+  100% {border-radius: 15px;}
+}
