@@ -1,5 +1,4 @@
 # Ripple
-# Ripple
 
 A UI Demonstration react app.
 
