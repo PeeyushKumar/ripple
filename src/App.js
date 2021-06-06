@@ -3,8 +3,8 @@ import Board from './components/Board'
 
 function App() {
 
-  const rows = 9;
-  const cols = 20;
+  const rows = 15;
+  const cols = 36;
 
   return (
     <div className="App">

@@ -3,8 +3,8 @@ html {
 }
 
 .tile {
-  width: 5vw;
-  height: 5vw;
+  width: 2.5vw;
+  height: 2.5vw;
   margin: -2px 0px;
   background-color: rgb(122, 193, 255);
   border: 1px solid #fff;
@@ -61,8 +61,12 @@ html {
 } */
 
 .board {
-  width: 100%;
+  width: 90vw;
   margin: auto;
+}
+
+.panel {
+  height: 15vh;
 }
 
 @keyframes animation1 {

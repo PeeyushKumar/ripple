@@ -1,5 +1,6 @@
     import React, {Component} from 'react';
-    import Tile from './Tile'
+    import Panel from './Panel';
+    import Tile from './Tile';
 
     class Board extends Component {
 
@@ -80,29 +81,6 @@
             }, 10);
         }
 
-        handleEndSelectorDown = () => {
-            this.setState({
-                endSelectorDown : true
-            })
-        }
-        handleEndSelectorUp = () => {
-            this.setState({
-                endSelectorDown : false
-            })
-        }
-
-        handleStartSelectorDown = () => {
-            this.setState({
-                startSelectorDown : true
-            })
-        }
-
-        handleStartSelectorUp = () => {
-            this.setState({
-                startSelectorDown : false
-            })
-        }
-
         handleNodeDrop = (id) => {
 
             const tiles = this.state.tiles;
@@ -150,12 +128,12 @@
 
         render() {
             return (
-                <div className="board">
-                    <button
-                        onClick={this.startSearching}
-                    >Go</button>
+                <div>
+                    <Panel
+                        startSearching={this.startSearching}
+                    ></Panel>
                     
-                    <div>
+                    <div className="board">
                         {
                             this.state.tiles.map( tile => <Tile 
                                 {...tile} 
