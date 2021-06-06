@@ -141,7 +141,7 @@
 
             const movable = ["start", "end"];
 
-            if (pickedType === "empty") {
+            if (pickedType === "empty" || pickedType === "wall") {
                 tiles[id].type = "wall";
                 this.setState({
                     tiles,
