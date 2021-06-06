@@ -33,8 +33,6 @@ class Tile extends Component {
             className += " tile-picked"
         }
 
-
-
         return(
             <div
                 onMouseUp={() => this.props.handleNodeDrop(id)}
