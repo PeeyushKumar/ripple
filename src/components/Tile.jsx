@@ -1,19 +1,30 @@
 import React, {Component} from 'react'
 
 class Tile extends Component {
+    
     render() {
         const id = this.props.id;
-        const color = this.props.color;
+        const type = this.props.type;
+        const visited = this.props.visited;
 
         let className = "tile";
-        className += " tile-" + color;
-            
+
+        if (type === "start") {
+            className += " tile-start";
+        }
+
+        else if (type === "end") {
+            className += " tile-end";
+        }
+
+        else if (visited === true) {
+            className += " tile-visited";
+        }
+
         return(
             <button
-                onClick={() => {
-                    className += " bounce"
-                    this.props.handleClick(id)
-                }}
+                onMouseUp={() => this.props.handleNodeDrop(id)}
+                onMouseDown={() => this.props.handleNodePick(id)}
                 className={className}
             ></button>
         );

@@ -7,71 +7,164 @@
             super(props);
             
             const count = this.props.count;
+            const startNodeId = 84;
+            const endNodeId = 95;
 
             const tiles = [];
             for (let i=0; i<count; i++) {
+                
                 const newTile = {
                     id : i,
-                    color : 'cyan',
+                    type : "generic",
+                    visited : false
                 }
+
+                if (newTile.id === startNodeId) {
+                    newTile.type = "start"
+                }
+                if (newTile.id === endNodeId) {
+                    newTile.type = "end"
+                }
+
                 tiles.push(newTile);
             }
 
             this.state = {
-                tiles
+                tiles,
+                found : false,
+                startNodeId : 84,
+                endNodeId : 95,
+                selectedId : null
             }
         }
 
-        handleClick = (clickedId) => {
+        startSearching = () => {
             const tiles = this.state.tiles;
+            const start = this.state.startNodeId;
+
             const visited = [];
-            this.changeNeighbours(tiles, clickedId, visited);        
+            this.explore(tiles, start, visited);        
         }
 
-        changeNeighbours = (tiles, idToChange, visited) => {
+        explore = (tiles, current, visited) => {
 
             const cols = this.props.cols;
             const count = this.props.count;
 
-            if (visited.includes(idToChange) || idToChange < 0 || idToChange >= count) {
+            if (current === this.state.endNodeId) {
+                this.setState({
+                    found : true
+                })
+            }
+
+            if (this.state.found || visited.includes(current) || current < 0 || current >= count) {
                 return;
             }
 
-            visited.push(idToChange);
-            this.change(tiles, idToChange);
-            this.setState(tiles);
+            visited.push(current);
+            tiles[current].visited = true;
+            this.setState({
+                tiles
+            });
+
             setTimeout(() => {
-                
-                if ((idToChange+1) % cols !== 0) {
-                    this.changeNeighbours(tiles, idToChange+1, visited);
+                if ((current+1) % cols !== 0) {
+                    this.explore(tiles, current+1, visited);
                 }
-                if (idToChange % cols !== 0) {
-                    this.changeNeighbours(tiles, idToChange-1, visited);
+                if (current % cols !== 0) {
+                    this.explore(tiles, current-1, visited);
                 }
 
-                this.changeNeighbours(tiles, idToChange-cols, visited);
-                this.changeNeighbours(tiles, idToChange+cols, visited);
+                this.explore(tiles, current-cols, visited);
+                this.explore(tiles, current+cols, visited);
             }, 10);
         }
 
-        change = (tiles, idToChange) => {
-            if (tiles[idToChange].color === 'cyan') {
-                tiles[idToChange].color = 'red'
-            } else {
-                tiles[idToChange].color = 'cyan'
+        handleEndSelectorDown = () => {
+            this.setState({
+                endSelectorDown : true
+            })
+        }
+        handleEndSelectorUp = () => {
+            this.setState({
+                endSelectorDown : false
+            })
+        }
+
+        handleStartSelectorDown = () => {
+            this.setState({
+                startSelectorDown : true
+            })
+        }
+
+        handleStartSelectorUp = () => {
+            this.setState({
+                startSelectorDown : false
+            })
+        }
+
+        handleNodeDrop = (id) => {
+
+            const tiles = this.state.tiles;
+            let startNodeId = this.state.startNodeId;
+            let endNodeId = this.state.endNodeId;
+            const selectedId = this.state.selectedId;
+            const type = tiles[selectedId].type;
+
+            if (selectedId == null) {
+                return;
             }
+
+            if (tiles[id].type !== "generic") {
+                this.setState({
+                    selectedId: null
+                })
+                return;
+            }
+
+            tiles[id].type = type;
+            tiles[selectedId].type = "generic";
+
+            if (type === "start") {
+                startNodeId = id;
+            }
+            else if (type === "end") {
+                endNodeId = id;
+            }
+
+            this.setState({
+                tiles: tiles,
+                startNodeId : startNodeId,
+                endNodeId : endNodeId,
+                selectedId : null
+            })
+        }
+
+        handleNodePick = (id) => {
+
+            this.setState({
+                selectedId : id
+            })
+
         }
 
         render() {
             return (
                 <div className="board">
-                    {
-                        this.state.tiles.map( tile => <Tile 
-                            {...tile} 
-                            key={tile.id}
-                            handleClick={this.handleClick}
-                        ></Tile>)
-                    }
+                    <button
+                        onClick={this.startSearching}
+                    >Go</button>
+                    
+                    <div>
+                        {
+                            this.state.tiles.map( tile => <Tile 
+                                {...tile} 
+                                key={tile.id}
+                                handleNodeDrop={this.handleNodeDrop}
+                                handleNodePick={this.handleNodePick}
+                            ></Tile>)
+                        }
+                    </div>
                 </div>
             );
         }

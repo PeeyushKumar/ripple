@@ -6,29 +6,59 @@ html {
   width: 5vw;
   height: 5vw;
   margin: -2px 0px;
+  background-color: rgb(122, 193, 255);
   border: 1px solid #fff;
   border-radius: 15px;
 }
 
+.tile:hover {
+  background-color: rgb(78, 172, 255);
+}
+
+.tile-start {
+  background-color: rgb(86, 67, 255);
+}
+
+.tile-start:hover {
+  background-color: rgb(57, 35, 255);
+}
+
+.tile-visited {
+  background-color: rgb(96, 255, 123);
+}
+
+.tile-visited:hover {
+  background-color: rgb(65, 255, 97);
+}
+
+.tile-end {
+  background-color: rgb(170, 67, 255);
+}
+
+.tile-end:hover {
+  background-color: rgb(158, 40, 255);
+}
+/* 
 .tile-cyan {
-  background-color: rgb(122, 193, 255);
   animation-name: animation1;
   animation-duration: 1s;
 }
 
-.tile-cyan:hover {
-  background-color: rgb(78, 172, 255);
-}
-
 .tile-red {
-  background-color: rgb(255, 67, 67);
   animation-name: animation2;
   animation-duration: 1s;
 }
 
-.tile-red:hover {
-  background-color: rgb(255, 45, 45);
+
+.tile-green {
+  background-color: rgb(101, 255, 114);
+  animation-name: animation2;
+  animation-duration: 1s;
 }
+
+.tile-green:hover {
+  background-color: rgb(47, 255, 65);
+} */
 
 .board {
   width: 100%;

@@ -3,7 +3,7 @@ import Board from './components/Board'
 
 function App() {
 
-  const rows = 10;
+  const rows = 9;
   const cols = 20;
 
   return (
