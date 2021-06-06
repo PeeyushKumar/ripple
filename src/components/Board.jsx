@@ -10,11 +10,11 @@
 
             const tiles = [];
             for (let i=0; i<count; i++) {
-                const newProps = {
+                const newTile = {
                     id : i,
                     color : 'cyan',
                 }
-                tiles.push(newProps);
+                tiles.push(newTile);
             }
 
             this.state = {
