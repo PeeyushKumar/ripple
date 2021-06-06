@@ -6,6 +6,7 @@ class Tile extends Component {
         const id = this.props.id;
         const type = this.props.type;
         const visited = this.props.visited;
+        const picked = this.props.picked;
 
         let className = "tile";
 
@@ -19,6 +20,10 @@ class Tile extends Component {
 
         else if (visited === true) {
             className += " tile-visited";
+        }
+
+        if (picked) {
+            className += " tile-picked"
         }
 
         return(

@@ -16,8 +16,9 @@
                 
                 const newTile = {
                     id : i,
-                    type : "generic",
-                    visited : false
+                    type : "empty",
+                    visited : false,
+                    picked : false
                 }
 
                 if (newTile.id === startNodeId) {
@@ -78,35 +79,37 @@
 
                 this.explore(tiles, current-cols, visited);
                 this.explore(tiles, current+cols, visited);
-            }, 10);
+            }, 1);
         }
 
         handleNodeDrop = (id) => {
 
-            const tiles = this.state.tiles;
-            let startNodeId = this.state.startNodeId;
-            let endNodeId = this.state.endNodeId;
             const selectedId = this.state.selectedId;
-            const type = tiles[selectedId].type;
 
             if (selectedId == null) {
                 return;
             }
 
-            if (tiles[id].type !== "generic") {
-                this.setState({
-                    selectedId: null
-                })
+            const tiles = this.state.tiles;
+            const currentTileType = tiles[id].type;
+            const movable = ["start", "end"]
+            if (movable.includes(currentTileType)) {
                 return;
             }
+ 
+            let startNodeId = this.state.startNodeId;
+            let endNodeId = this.state.endNodeId;
 
-            tiles[id].type = type;
-            tiles[selectedId].type = "generic";
+            const pickedType = tiles[selectedId].type;
 
-            if (type === "start") {
+            tiles[id].type = pickedType;
+            tiles[selectedId].type = "empty";
+            tiles[selectedId].picked = false;
+
+            if (pickedType === "start") {
                 startNodeId = id;
             }
-            else if (type === "end") {
+            else if (pickedType === "end") {
                 endNodeId = id;
             }
 
@@ -120,10 +123,18 @@
 
         handleNodePick = (id) => {
 
-            this.setState({
-                selectedId : id
-            })
+            const movable = ["start", "end"];
+            const tiles = this.state.tiles;
+            
+            const type = tiles[id].type;
 
+            if (movable.includes(type)) {
+                tiles[id].picked = true;
+                this.setState({
+                    tiles,
+                    selectedId : id
+                })
+            }
         }
 
         render() {
