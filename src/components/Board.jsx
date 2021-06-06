@@ -30,26 +30,32 @@
 
         changeNeighbours = (tiles, idToChange, visited) => {
 
-            const rows = this.props.rows;
             const cols = this.props.cols;
             const count = this.props.count;
 
             if (visited.includes(idToChange) || idToChange < 0 || idToChange >= count) {
                 return;
             }
+
             visited.push(idToChange);
             this.change(tiles, idToChange);
             this.setState(tiles);
             setTimeout(() => {
-                this.changeNeighbours(tiles, idToChange+1, visited);
-                this.changeNeighbours(tiles, idToChange-1, visited);
+                
+                if ((idToChange+1) % cols !== 0) {
+                    this.changeNeighbours(tiles, idToChange+1, visited);
+                }
+                if (idToChange % cols !== 0) {
+                    this.changeNeighbours(tiles, idToChange-1, visited);
+                }
+
                 this.changeNeighbours(tiles, idToChange-cols, visited);
                 this.changeNeighbours(tiles, idToChange+cols, visited);
             }, 10);
         }
 
         change = (tiles, idToChange) => {
-            if (tiles[idToChange].color == 'cyan') {
+            if (tiles[idToChange].color === 'cyan') {
                 tiles[idToChange].color = 'red'
             } else {
                 tiles[idToChange].color = 'cyan'
