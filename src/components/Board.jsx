@@ -33,10 +33,12 @@
 
             this.state = {
                 tiles,
-                found : false,
-                startNodeId : 84,
-                endNodeId : 95,
-                selectedId : null
+                found: false,
+                startNodeId: 84,
+                endNodeId: 95,
+                selectedId: null,
+                drawingWall: false,
+                pointedId: null
             }
         }
 
@@ -58,8 +60,8 @@
                     found : true
                 })
             }
-
-            if (this.state.found || visited.includes(current) || current < 0 || current >= count) {
+            
+            if (this.state.found || visited.includes(current) || current < 0 || current >= count || tiles[current].type === "wall") {
                 return;
             }
 
@@ -83,6 +85,10 @@
         }
 
         handleNodeDrop = (id) => {
+
+            this.setState({
+                drawingWall: false
+            })
 
             const selectedId = this.state.selectedId;
 
@@ -123,18 +129,46 @@
 
         handleNodePick = (id) => {
 
-            const movable = ["start", "end"];
             const tiles = this.state.tiles;
-            
-            const type = tiles[id].type;
+            const pickedType = tiles[id].type;
 
-            if (movable.includes(type)) {
+            const movable = ["start", "end"];
+
+            if (pickedType === "empty") {
+                tiles[id].type = "wall";
+                this.setState({
+                    tiles,
+                    drawingWall: true
+                })
+            }
+
+            else if (movable.includes(pickedType)) {
                 tiles[id].picked = true;
                 this.setState({
                     tiles,
                     selectedId : id
                 })
             }
+        }
+
+        handleMouseEnter = (id) => {
+            const drawingWall = this.state.drawingWall; 
+            if (drawingWall === false) {
+                return;
+            }
+
+            const movable = ["start", "end"]
+            const tiles = this.state.tiles;
+            const type = tiles[id].type;
+            if (movable.includes(type)) {
+                return;
+            }
+
+            tiles[id].type = "wall";
+
+            this.setState({
+                tiles
+            })
         }
 
         render() {
@@ -151,6 +185,7 @@
                                 key={tile.id}
                                 handleNodeDrop={this.handleNodeDrop}
                                 handleNodePick={this.handleNodePick}
+                                handleMouseEnter={this.handleMouseEnter}
                             ></Tile>)
                         }
                     </div>

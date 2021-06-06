@@ -42,6 +42,12 @@ html {
   opacity: 60%;
 }
 
+.tile-wall {
+  opacity: 100%;
+  border: solid 1px #646464;
+  background-color: #3a3a3a;
+}
+
 .board {
   width: 90vw;
   margin: auto;
