@@ -5,13 +5,17 @@ class Tile extends Component {
         const id = this.props.id;
         const color = this.props.color;
 
-        let className = "tile tile-" + color;
+        let className = "tile";
+        className += " tile-" + color;
             
         return(
-            <button onClick={() => {
-                className += " bounce"
-                this.props.handleClick(id)
-            }} className={className}></button>
+            <button
+                onClick={() => {
+                    className += " bounce"
+                    this.props.handleClick(id)
+                }}
+                className={className}
+            ></button>
         );
     }
 }

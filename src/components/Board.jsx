@@ -60,7 +60,11 @@
             return (
                 <div className="board">
                     {
-                        this.state.tiles.map( tile => <Tile {...tile} key={tile.id} handleClick={this.handleClick}> </Tile>)
+                        this.state.tiles.map( tile => <Tile 
+                            {...tile} 
+                            key={tile.id}
+                            handleClick={this.handleClick}
+                        ></Tile>)
                     }
                 </div>
             );
