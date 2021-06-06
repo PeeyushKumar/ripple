@@ -8,12 +8,13 @@ html {
   width: 2.5vw;
   height: 2.5vw;
   margin: -2px 0px;
-  border: 1px solid #4cc9f0;
+
   transition: all 0.2s ease-out;
 }
 
 .tile-empty {
   opacity: 40%;
+  border: 1px solid #4cc9f0;
 }
 
 .tile-start {
@@ -35,7 +36,6 @@ html {
 }
 
 .tile-wall {
-  opacity: 100%;
   border: solid 1px #646464;
   background-color: #3a3a3a;
 }
@@ -43,7 +43,7 @@ html {
 .tile-visited {
   opacity: 70%;
   background-color: #4cc9f0;
-  border: 1px solid #83defa;
+  border: 1px solid #a7eaff;
 }
 
 .tile-visited:hover {
