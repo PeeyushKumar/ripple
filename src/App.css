@@ -3,20 +3,41 @@ html {
 }
 
 .tile {
-  opacity: 40%;
+  box-sizing: border-box;
+  display: inline-block;
   width: 2.5vw;
   height: 2.5vw;
   margin: -2px 0px;
   border: 1px solid #4cc9f0;
+  transition: all 0.2s ease-out;
+}
+
+.tile-empty {
+  opacity: 40%;
 }
 
 .tile-start {
-  opacity: 100%;
   background-color: #3a0ca3;
 }
 
 .tile-start:hover {
+  transition-duration: 0s;
   background-color: #340b94;
+}
+
+.tile-end {
+  background-color: #ff4699;
+}
+
+.tile-end:hover {
+  transition-duration: 0s;
+  background-color: #ff0073;
+}
+
+.tile-wall {
+  opacity: 100%;
+  border: solid 1px #646464;
+  background-color: #3a3a3a;
 }
 
 .tile-visited {
@@ -26,26 +47,12 @@ html {
 }
 
 .tile-visited:hover {
+  transition-duration: 0s;
   background-color: #22beee;
-}
-
-.tile-end {
-  opacity: 100%;
-  background-color: #ff4699;
-}
-
-.tile-end:hover {
-  background-color: #ff0073;
 }
 
 .tile-picked {
   opacity: 60%;
-}
-
-.tile-wall {
-  opacity: 100%;
-  border: solid 1px #646464;
-  background-color: #3a3a3a;
 }
 
 .board {

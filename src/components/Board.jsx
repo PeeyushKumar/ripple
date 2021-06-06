@@ -17,7 +17,6 @@
                 const newTile = {
                     id : i,
                     type : "empty",
-                    visited : false,
                     picked : false
                 }
 
@@ -38,7 +37,6 @@
                 endNodeId: 95,
                 selectedId: null,
                 drawingWall: false,
-                pointedId: null
             }
         }
 
@@ -61,12 +59,21 @@
                 })
             }
             
-            if (this.state.found || visited.includes(current) || current < 0 || current >= count || tiles[current].type === "wall") {
+            if (this.state.found || visited.includes(current) || current < 0 || current >= count) {
                 return;
             }
 
             visited.push(current);
-            tiles[current].visited = true;
+
+            const type = tiles[current].type;
+            if (type === "wall") {
+                return;
+            }
+
+            if (type !== "start") {
+                tiles[current].type = "visited";
+            }
+
             this.setState({
                 tiles
             });

@@ -5,7 +5,6 @@ class Tile extends Component {
     render() {
         const id = this.props.id;
         const type = this.props.type;
-        const visited = this.props.visited;
         const picked = this.props.picked;
 
         let className = "tile";
@@ -18,11 +17,15 @@ class Tile extends Component {
             className += " tile-end";
         }
 
+        else if (type === "empty") {
+            className += " tile-empty";
+        }
+
         else if (type === "wall") {
             className += " tile-wall"
         }
 
-        else if (visited === true) {
+        else if (type === "visited") {
             className += " tile-visited";
         }
 
@@ -33,12 +36,12 @@ class Tile extends Component {
 
 
         return(
-            <button
+            <div
                 onMouseUp={() => this.props.handleNodeDrop(id)}
                 onMouseDown={() => this.props.handleNodePick(id)}
                 onMouseEnter={() => this.props.handleMouseEnter(id)}
                 className={className}
-            ></button>
+            ></div>
         );
     }
 }
