@@ -92,18 +92,23 @@
         }
 
         handleNodeDrop = (id) => {
-
             this.setState({
                 drawingWall: false
             })
 
             const selectedId = this.state.selectedId;
+            this.setState({
+                selectedId: null
+            })
 
             if (selectedId == null) {
                 return;
             }
 
             const tiles = this.state.tiles;
+            
+            tiles[selectedId].picked = false;
+
             const currentTileType = tiles[id].type;
             const movable = ["start", "end"]
             if (movable.includes(currentTileType)) {
@@ -130,7 +135,6 @@
                 tiles: tiles,
                 startNodeId : startNodeId,
                 endNodeId : endNodeId,
-                selectedId : null
             })
         }
 
