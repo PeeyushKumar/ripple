@@ -1,19 +1,22 @@
 import React, {Component} from 'react';
+import {Button} from 'react-bootstrap'
 
 class Panel extends Component {
     render() {
 
         return (
             <div className="panel">
-                <button
-                    className="btn"
+                
+                <Button
+                    className="btn btn-success btn-lg"
                     onClick={this.props.startSearching}
-                >Go</button>
+                >Go</Button>
 
-                <button
-                    className="btn"
+                <Button
+                    className="btn btn-secondary btn-lg"
                     onClick={this.props.reset}
-                >Reset</button>
+                >Reset</Button>
+            
             </div>
         )
     }
