@@ -8,8 +8,8 @@
             super(props);
             
             const count = this.props.count;
-            const startNodeId = 84;
-            const endNodeId = 95;
+            const startNodeId = 261;
+            const endNodeId = 278;
 
             const tiles = [];
             for (let i=0; i<count; i++) {
@@ -31,13 +31,45 @@
             }
 
             this.state = {
+                count,
                 tiles,
                 found: false,
-                startNodeId: 84,
-                endNodeId: 95,
+                startNodeId,
+                endNodeId,
                 selectedId: null,
                 drawingWall: false,
             }
+        }
+
+        reset = () => {
+
+            const startNodeId = this.state.startNodeId;
+            const endNodeId = this.state.endNodeId;
+            const count = this.state.count;
+            const tiles = [];
+            for (let i=0; i<count; i++) {
+                const newTile = {
+                    id : i,
+                    type : "empty",
+                    picked : false
+                }
+
+                if (newTile.id === startNodeId) {
+                    newTile.type = "start"
+                }
+                if (newTile.id === endNodeId) {
+                    newTile.type = "end"
+                }
+
+                tiles.push(newTile);
+            }
+
+            this.setState({
+                tiles,
+                found: false,
+                selectedId: null,
+                drawingWall: false,
+            })
         }
 
         startSearching = () => {
@@ -187,6 +219,7 @@
                 <div>
                     <Panel
                         startSearching={this.startSearching}
+                        reset={this.reset}
                     ></Panel>
                     
                     <div className="board">
