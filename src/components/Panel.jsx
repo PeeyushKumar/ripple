@@ -6,7 +6,13 @@ class Panel extends Component {
 
         return (
             <div className="panel">
-                
+
+                <Button
+                    className="btn btn-primary btn-lg"
+                    data-bs-toggle="modal"
+                    data-bs-target="#helpModal"
+                >Help</Button>
+
                 <Button
                     className="btn btn-success btn-lg"
                     onClick={this.props.startSearching}

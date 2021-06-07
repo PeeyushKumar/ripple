@@ -1,4 +1,5 @@
     import React, {Component} from 'react';
+    import Help from './Help'
     import Panel from './Panel';
     import Tile from './Tile';
 
@@ -217,6 +218,8 @@
         render() {
             return (
                 <div>
+                    <Help />
+
                     <Panel
                         startSearching={this.startSearching}
                         reset={this.reset}
