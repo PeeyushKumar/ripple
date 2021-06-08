@@ -1,29 +1,36 @@
 import React from 'react';
-import {Modal} from 'bootstrap';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
-const Help = () => {
+const Help = (props) => {
     return(
-        <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="modal-title" id="helpModalLabel">Ripple</h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <h5>Move Tiles</h5>
-                        <p>Click and Drag Start or End Tile to move them to a new location.</p>
-                        <h5>Add Walls</h5>
-                        <p>Drag across blank spaces to create a wall.</p>
-                        <h5>Enjoy</h5>
-                        <p>Hit go to start the simulation.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <Modal
+            show={props.show}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+
+            <Modal.Header>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    <h2>Ripple</h2>
+                </Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body>
+                <h4>Move Tiles</h4>
+                <p>Click and Drag Start or End Tile to move them to a new location.</p>
+                <h4>Add Walls</h4>
+                <p>Drag across blank spaces to create a wall.</p>
+                <h4>Enjoy</h4>
+                <p>Hit go to start the simulation.</p>
+            </Modal.Body>
+            
+            <Modal.Footer>
+                <Button onClick={props.closeHelp}>Close</Button>
+            </Modal.Footer>
+
+        </Modal>
     )
 }
 

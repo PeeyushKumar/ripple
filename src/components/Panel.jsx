@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button} from 'react-bootstrap'
+import Button from 'react-bootstrap/Button'
 
 class Panel extends Component {
     render() {
@@ -9,8 +9,7 @@ class Panel extends Component {
 
                 <Button
                     className="btn btn-primary btn-lg"
-                    data-bs-toggle="modal"
-                    data-bs-target="#helpModal"
+                    onClick={this.props.showHelp}
                 >Help</Button>
 
                 <Button
