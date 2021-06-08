@@ -3,9 +3,7 @@ import React, {Component} from 'react'
 class Tile extends Component {
     
     render() {
-        const id = this.props.id;
-        const type = this.props.type;
-        const picked = this.props.picked;
+        const {id, type, picked} = this.props;
 
         let className = "tile";
 
@@ -24,6 +22,9 @@ class Tile extends Component {
                 break;
             case "visited":
                 className += " tile-visited";
+                break;
+            default:
+                //do nothing
         }
 
         if (picked) {

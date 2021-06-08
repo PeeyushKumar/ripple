@@ -6,6 +6,7 @@ const Help = (props) => {
     return(
         <Modal
             show={props.show}
+            onHide={props.closeHelp}
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered

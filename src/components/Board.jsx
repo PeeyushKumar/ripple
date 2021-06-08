@@ -8,12 +8,12 @@ class Board extends Component {
     constructor(props) {
         super(props);
         
-        const count = this.props.count;
+        const noOfTiles = this.props.noOfTiles;
         const startNodeId = 261;
         const endNodeId = 278;
 
         const tiles = [];
-        for (let i=0; i<count; i++) {
+        for (let i=0; i<noOfTiles; i++) {
             
             const newTile = {
                 id : i,
@@ -32,24 +32,23 @@ class Board extends Component {
         }
 
         this.state = {
-            count,
+            noOfTiles,
             tiles,
             showHelp: true,
             found: false,
             startNodeId,
             endNodeId,
-            selectedId: null,
+            pickedId: null,
             drawingWall: false,
         }
     }
 
     reset = () => {
 
-        const startNodeId = this.state.startNodeId;
-        const endNodeId = this.state.endNodeId;
-        const count = this.state.count;
+        const {startNodeId, endNodeId, noOfTiles} = this.state;
+
         const tiles = [];
-        for (let i=0; i<count; i++) {
+        for (let i=0; i<noOfTiles; i++) {
             const newTile = {
                 id : i,
                 type : "empty",
@@ -69,7 +68,7 @@ class Board extends Component {
         this.setState({
             tiles,
             found: false,
-            selectedId: null,
+            pickedId: null,
             drawingWall: false,
         })
     }
@@ -87,17 +86,16 @@ class Board extends Component {
     }
 
     startSearching = () => {
-        const tiles = this.state.tiles;
-        const start = this.state.startNodeId;
+        const {tiles, startNodeId} = this.state;
 
         const visited = [];
-        this.explore(tiles, start, visited);        
+        this.explore(tiles, startNodeId, visited);        
     }
 
     explore = (tiles, current, visited) => {
 
         const cols = this.props.cols;
-        const count = this.props.count;
+        const noOfTiles = this.props.noOfTiles;
 
         if (current === this.state.endNodeId) {
             this.setState({
@@ -105,7 +103,7 @@ class Board extends Component {
             })
         }
         
-        if (this.state.found || visited.includes(current) || current < 0 || current >= count) {
+        if (this.state.found || visited.includes(current) || current < 0 || current >= noOfTiles) {
             return;
         }
 
@@ -142,18 +140,18 @@ class Board extends Component {
             drawingWall: false
         })
 
-        const selectedId = this.state.selectedId;
+        const pickedId = this.state.pickedId;
         this.setState({
-            selectedId: null
+            pickedId: null
         })
 
-        if (selectedId == null) {
+        if (pickedId == null) {
             return;
         }
 
         const tiles = this.state.tiles;
         
-        tiles[selectedId].picked = false;
+        tiles[pickedId].picked = false;
 
         const currentTileType = tiles[id].type;
         const movable = ["start", "end"]
@@ -164,11 +162,11 @@ class Board extends Component {
         let startNodeId = this.state.startNodeId;
         let endNodeId = this.state.endNodeId;
 
-        const pickedType = tiles[selectedId].type;
+        const pickedType = tiles[pickedId].type;
 
         tiles[id].type = pickedType;
-        tiles[selectedId].type = "empty";
-        tiles[selectedId].picked = false;
+        tiles[pickedId].type = "empty";
+        tiles[pickedId].picked = false;
 
         if (pickedType === "start") {
             startNodeId = id;
@@ -203,7 +201,7 @@ class Board extends Component {
             tiles[id].picked = true;
             this.setState({
                 tiles,
-                selectedId : id
+                pickedId : id
             })
         }
     }
@@ -242,7 +240,7 @@ class Board extends Component {
                     reset={this.reset}
                 ></Panel>
                 
-                <div className="board">
+                <div className="tile-group">
                     {
                         this.state.tiles.map( tile => <Tile 
                             {...tile} 

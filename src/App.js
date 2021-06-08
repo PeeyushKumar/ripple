@@ -12,7 +12,7 @@ function App() {
       <Board 
           rows={rows}
           cols={cols}
-          count={rows*cols}
+          noOfTiles={rows*cols}
       >
       </Board>
     </div>

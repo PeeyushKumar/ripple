@@ -54,7 +54,7 @@ html {
   opacity: 0.6;
 }
 
-.board {
+.tile-group {
   width: 90vw;
   margin: auto;
 }
