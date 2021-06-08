@@ -12,7 +12,7 @@ html {
 }
 
 .tile-empty {
-  opacity: 40%;
+  opacity: 0.4;
   border: 1px solid #4cc9f0;
 }
 
@@ -40,7 +40,7 @@ html {
 }
 
 .tile-visited {
-  opacity: 70%;
+  opacity: 0.7;
   background-color: #4cc9f0;
   border: 1px solid #a7eaff;
 }
@@ -51,7 +51,7 @@ html {
 }
 
 .tile-picked {
-  opacity: 60%;
+  opacity: 0.6;
 }
 
 .board {
