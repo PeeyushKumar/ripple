@@ -9,24 +9,17 @@ class Tile extends Component {
 
         let className = "tile";
 
-        if (type === "start") {
-            className += " tile-start";
-        }
-
-        else if (type === "end") {
-            className += " tile-end";
-        }
-
-        else if (type === "empty") {
-            className += " tile-empty";
-        }
-
-        else if (type === "wall") {
-            className += " tile-wall"
-        }
-
-        else if (type === "visited") {
-            className += " tile-visited";
+        switch(type) {
+            case "start":
+                className += " tile-start";
+            case "end":
+                className += " tile-end";
+            case "empty":
+                className += " tile-empty";
+            case "wall":
+                className += " tile-wall";
+            case "visited":
+                className += " tile-visited";
         }
 
         if (picked) {
