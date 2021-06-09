@@ -7,7 +7,6 @@ html {
   display: inline-block;
   width: 2.5vw;
   height: 2.5vw;
-  margin: -3px 0px;
   transition: all 0.2s ease-out;
 }
 
@@ -57,6 +56,8 @@ html {
 .tile-group {
   width: 90vw;
   margin: auto;
+  line-height: 0;
+  font-size: 0;
 }
 
 .panel {
