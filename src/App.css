@@ -5,8 +5,8 @@ html {
 .node {
   box-sizing: border-box;
   display: inline-block;
-  width: 25px;
-  height: 25px;
+  width: 37px;
+  height: 37px;
   opacity: 0.4;
   transition: all 0.2s ease-out;
   border: 1px solid #4cc9f0;

@@ -40,7 +40,7 @@ class Board extends Component {
 
         const ratio = width/height;
 
-        const noOfRows = Math.floor(height/25);
+        const noOfRows = Math.floor(height/37);
         const noOfCols = Math.floor(noOfRows*ratio);
 
         let startCol = Math.floor(noOfCols/2 - noOfCols/4)
