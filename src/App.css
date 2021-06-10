@@ -2,62 +2,65 @@ html {
   overflow: hidden;
 }
 
-.tile {
+.node {
   box-sizing: border-box;
   display: inline-block;
-  width: 2.5vw;
-  height: 2.5vw;
-  transition: all 0.2s ease-out;
-}
-
-.tile-empty {
+  width: 25px;
+  height: 25px;
   opacity: 0.4;
+  transition: all 0.2s ease-out;
   border: 1px solid #4cc9f0;
 }
 
-.tile-start {
-  background-color: #3a0ca3;
-}
-
-.tile-start:hover {
-  transition-duration: 0s;
-  background-color: #340b94;
-}
-
-.tile-end {
-  background-color: #ff4699;
-}
-
-.tile-end:hover {
-  transition-duration: 0s;
-  background-color: #ff0073;
-}
-
-.tile-wall {
-  border: solid 1px #646464;
-  background-color: #3a3a3a;
-}
-
-.tile-visited {
-  opacity: 0.7;
+.node-visited {
   background-color: #4cc9f0;
   border: 1px solid #a7eaff;
+  opacity: 0.7;
 }
 
-.tile-visited:hover {
+.node-visited:hover {
   transition-duration: 0s;
   background-color: #22beee;
 }
 
-.tile-picked {
+.node-wall {
+  border: solid 1px #646464;
+  background-color: #3a3a3a;
+  opacity: 1;
+}
+
+.node-start {
+  background-color: #3a0ca3;
+  border: solid 1px #340b94;
+  opacity: 1;
+}
+
+.node-start:hover {
+  transition-duration: 0s;
+  background-color: #340b94;
+}
+
+.node-end {
+  background-color: #ff4699;
+  border: solid 1px #ff4699;
+  opacity: 1;
+}
+
+.node-end:hover {
+  transition-duration: 0s;
+  background-color: #ff0073;
+}
+
+.node-picked {
   opacity: 0.6;
 }
 
-.tile-group {
-  width: 90vw;
+.node-group {
   margin: auto;
+  align-items: center;
   line-height: 0;
   font-size: 0;
+  text-align: center;
 }
 
 .panel {

@@ -8,17 +8,17 @@ class Panel extends Component {
             <div className="panel">
 
                 <Button
-                    className="btn btn-primary btn-lg"
+                    className="btn btn-primary"
                     onClick={this.props.showHelp}
                 >Help</Button>
 
                 <Button
-                    className="btn btn-success btn-lg"
+                    className="btn btn-success btn-xs-block"
                     onClick={this.props.startSearching}
                 >Go</Button>
 
                 <Button
-                    className="btn btn-secondary btn-lg"
+                    className="btn btn-secondary"
                     onClick={this.props.reset}
                 >Reset</Button>
             

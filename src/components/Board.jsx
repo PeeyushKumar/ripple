@@ -1,74 +1,97 @@
 import React, {Component} from 'react';
 import Help from './Help'
 import Panel from './Panel';
-import Tile from './Tile';
+import Node from './Node';
+
 
 class Board extends Component {
 
     constructor(props) {
         super(props);
         
-        const noOfTiles = this.props.noOfTiles;
-        const startNodeId = 261;
-        const endNodeId = 278;
-
-        const tiles = [];
-        for (let i=0; i<noOfTiles; i++) {
-            
-            const newTile = {
-                id : i,
-                type : "empty",
-                picked : false
-            }
-
-            if (newTile.id === startNodeId) {
-                newTile.type = "start"
-            }
-            if (newTile.id === endNodeId) {
-                newTile.type = "end"
-            }
-
-            tiles.push(newTile);
-        }
-
         this.state = {
-            noOfTiles,
-            tiles,
-            showHelp: true,
+            grid: [[]],
+            noOfRows: null,
+            noOfCols: null,
+
+            startRow: null,
+            startCol: null,
+            endRow: null,
+            endCol: null,
+            
+            showHelp: false,
             found: false,
-            startNodeId,
-            endNodeId,
-            pickedId: null,
             drawingWall: false,
+
+            savedRow: null,
+            savedCol: null
         }
     }
 
-    reset = () => {
+    componentDidMount = () => {
+        this.createGrid();
 
-        const {startNodeId, endNodeId, noOfTiles} = this.state;
+        window.addEventListener('resize', this.createGrid);
+    }
 
-        const tiles = [];
-        for (let i=0; i<noOfTiles; i++) {
-            const newTile = {
-                id : i,
-                type : "empty",
-                picked : false
+    createGrid = () => {
+        const width = window.innerWidth * 0.9;
+        const height = window.innerHeight * 0.8;
+
+        const ratio = width/height;
+
+        const noOfRows = Math.floor(height/25);
+        const noOfCols = Math.floor(noOfRows*ratio);
+
+        let startCol = Math.floor(noOfCols/2 - noOfCols/4)
+        let startRow = Math.floor(noOfRows/2)-1
+
+        let endCol = Math.floor(noOfCols/2 + noOfCols/4)
+        let endRow = Math.floor(noOfRows/2)-1
+
+
+        const grid = [];
+        for (let rowIdx=0; rowIdx<noOfRows; rowIdx++) {
+            const row = []
+            for (let nodeIdx=0; nodeIdx<noOfCols; nodeIdx++) {
+                const node = {
+                    row: rowIdx,
+                    col: nodeIdx,
+                    isStart: rowIdx === startRow && nodeIdx === startCol,
+                    isEnd: rowIdx === endRow && nodeIdx === endCol,
+                    isWall: false,
+                    isVisited: false,
+                    isPicked: false
+                }
+                row.push(node);
             }
-
-            if (newTile.id === startNodeId) {
-                newTile.type = "start"
-            }
-            if (newTile.id === endNodeId) {
-                newTile.type = "end"
-            }
-
-            tiles.push(newTile);
+            grid.push(row);
         }
 
         this.setState({
-            tiles,
+            grid,
+            noOfRows,
+            noOfCols,     
+            startRow,
+            startCol,
+            endRow,
+            endCol       
+        })
+    } 
+
+    reset = () => {
+        const {grid, noOfRows, noOfCols} = this.state;
+
+        for(let rowIdx=0; rowIdx<noOfRows; rowIdx++) {
+            for (let nodeIdx=0; nodeIdx<noOfCols; nodeIdx++) {
+                grid[rowIdx][nodeIdx].isWall = false;
+                grid[rowIdx][nodeIdx].isVisited = false;
+            }
+        }
+
+        this.setState({
+            grid,
             found: false,
-            pickedId: null,
             drawingWall: false,
         })
     }
@@ -85,148 +108,120 @@ class Board extends Component {
         })
     }
 
-    startSearching = () => {
-        const {tiles, startNodeId} = this.state;
+    isValidIndex = (row, col) => {
+        const {noOfRows, noOfCols} = this.state;
 
-        const visited = [];
-        this.explore(tiles, startNodeId, visited);        
+        return (row >= 0 && row < noOfRows && col >= 0 && col < noOfCols)
     }
 
-    explore = (tiles, current, visited) => {
+    startSearching = () => {
+        const {grid, startRow, startCol} = this.state;
 
-        const cols = this.props.cols;
-        const noOfTiles = this.props.noOfTiles;
+        this.explore(grid, startRow, startCol);        
+    }
 
-        if (current === this.state.endNodeId) {
+    explore = (grid, fromRow, fromCol) => {
+
+        if (!this.isValidIndex(fromRow,fromCol)) return;
+
+        const currentNode = grid[fromRow][fromCol];
+
+        if (currentNode.isEnd) {
             this.setState({
                 found : true
             })
         }
         
-        if (this.state.found || visited.includes(current) || current < 0 || current >= noOfTiles) {
-            return;
-        }
+        if (this.state.found || currentNode.isVisited || currentNode.isWall) return;
 
-        visited.push(current);
-
-        const type = tiles[current].type;
-        if (type === "wall") {
-            return;
-        }
-
-        if (type !== "start") {
-            tiles[current].type = "visited";
-        }
+        currentNode.isVisited = true;
+        grid[fromRow][fromCol] = currentNode;
 
         this.setState({
-            tiles
-        });
+            grid
+        })
 
         setTimeout(() => {
-            if ((current+1) % cols !== 0) {
-                this.explore(tiles, current+1, visited);
-            }
-            if (current % cols !== 0) {
-                this.explore(tiles, current-1, visited);
-            }
-
-            this.explore(tiles, current-cols, visited);
-            this.explore(tiles, current+cols, visited);
+            this.explore(grid, fromRow, fromCol+1);
+            this.explore(grid, fromRow+1, fromCol);
+            this.explore(grid, fromRow, fromCol-1);
+            this.explore(grid, fromRow-1, fromCol);            
         }, 1);
     }
 
-    handleNodeDrop = (id) => {
+    handleOnMouseUp = (row, col) => {
+        let {grid, startRow, startCol, savedRow, savedCol} = this.state;
+
         this.setState({
             drawingWall: false
         })
 
-        const pickedId = this.state.pickedId;
-        this.setState({
-            pickedId: null
-        })
-
-        if (pickedId == null) {
-            return;
-        }
-
-        const tiles = this.state.tiles;
+        if (savedRow === null || savedCol === null) return;
+        if (grid[row][col].isStart || grid[row][col].isEnd) return;
         
-        tiles[pickedId].picked = false;
+        grid[row][col].isStart = grid[savedRow][savedCol].isStart;
+        grid[row][col].isEnd = grid[savedRow][savedCol].isEnd;
 
-        const currentTileType = tiles[id].type;
-        const movable = ["start", "end"]
-        if (movable.includes(currentTileType)) {
-            return;
-        }
+        if (grid[savedRow][savedCol].isStart) {
+            startRow = row;
+            startCol = col;
+        } 
 
-        let startNodeId = this.state.startNodeId;
-        let endNodeId = this.state.endNodeId;
-
-        const pickedType = tiles[pickedId].type;
-
-        tiles[id].type = pickedType;
-        tiles[pickedId].type = "empty";
-        tiles[pickedId].picked = false;
-
-        if (pickedType === "start") {
-            startNodeId = id;
-        }
-        else if (pickedType === "end") {
-            endNodeId = id;
-        }
+        grid[savedRow][savedCol].isStart = false;
+        grid[savedRow][savedCol].isEnd = false;
+        grid[savedRow][savedCol].isPicked = false;
 
         this.setState({
-            tiles: tiles,
-            startNodeId : startNodeId,
-            endNodeId : endNodeId,
-        })
+            grid,
+            startRow,
+            startCol,
+            savedRow: null,
+            savedCol: null
+        })   
     }
 
-    handleNodePick = (id) => {
+    handleOnMouseDown = (row, col) => {
+        const {grid, savedRow, savedCol} = this.state;
 
-        const tiles = this.state.tiles;
-        const pickedType = tiles[id].type;
-
-        const movable = ["start", "end"];
-
-        if (pickedType === "empty" || pickedType === "wall") {
-            tiles[id].type = "wall";
+        if (!grid[row][col].isStart && !grid[row][col].isEnd) {
+            grid[row][col].isWall = true;
+            grid[row][col].isVisited = false;
             this.setState({
-                tiles,
                 drawingWall: true
             })
+            return;
         }
 
-        else if (movable.includes(pickedType)) {
-            tiles[id].picked = true;
-            this.setState({
-                tiles,
-                pickedId : id
-            })
-        }
+        if (savedRow !== null || savedCol !== null) return;
+
+        grid[row][col].isPicked = true;
+        
+        this.setState({
+            grid,
+            savedRow: row,
+            savedCol: col
+        })
     }
 
-    handleMouseEnter = (id) => {
-        const drawingWall = this.state.drawingWall; 
-        if (drawingWall === false) {
-            return;
-        }
+    handleOnMouseEnter = (row, col) => {
 
-        const movable = ["start", "end"]
-        const tiles = this.state.tiles;
-        const type = tiles[id].type;
-        if (movable.includes(type)) {
-            return;
-        }
+        const {grid, drawingWall} = this.state; 
 
-        tiles[id].type = "wall";
+        if (!drawingWall) return;
+
+        if (grid[row][col].isStart || grid[row][col].isEnd) return;
+
+        grid[row][col].isWall = true;
+        grid[row][col].isVisited = false;
 
         this.setState({
-            tiles
+            grid
         })
     }
 
     render() {
+        const {grid} = this.state;
+
         return (
             <div>
                 <Help
@@ -240,15 +235,21 @@ class Board extends Component {
                     reset={this.reset}
                 ></Panel>
                 
-                <div className="tile-group">
+                <div className="node-group">
                     {
-                        this.state.tiles.map( tile => <Tile 
-                            {...tile} 
-                            key={tile.id}
-                            handleNodeDrop={this.handleNodeDrop}
-                            handleNodePick={this.handleNodePick}
-                            handleMouseEnter={this.handleMouseEnter}
-                        ></Tile>)
+                        grid.map((row, rowIdx) => (
+                            <div key={rowIdx} className="node-row">{
+                            row.map((node, nodeIdx) => (
+                                <Node
+                                    {...node}
+                                    key={nodeIdx}
+                                    handleOnMouseUp={this.handleOnMouseUp}
+                                    handleOnMouseDown={this.handleOnMouseDown}
+                                    handleOnMouseEnter={this.handleOnMouseEnter}
+                                ></Node>
+                            ))}
+                            </div>
+                        ))
                     }
                 </div>
             </div>
