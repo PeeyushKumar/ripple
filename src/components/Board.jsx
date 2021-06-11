@@ -103,6 +103,23 @@ class Board extends Component {
         })
     }
 
+    resetSearch = () => {
+        const {grid, noOfRows, noOfCols} = this.state;
+
+        for(let rowIdx=0; rowIdx<noOfRows; rowIdx++) {
+            for (let nodeIdx=0; nodeIdx<noOfCols; nodeIdx++) {
+                grid[rowIdx][nodeIdx].isVisited = false;
+                grid[rowIdx][nodeIdx].isPath = false;
+                grid[rowIdx][nodeIdx].parentRow = null;
+                grid[rowIdx][nodeIdx].parentCol = null;
+            }
+        }
+
+        this.setState({
+            grid,
+        })
+    }
+
     showHelp = () => {
         this.setState({
             showHelp: true
@@ -257,6 +274,8 @@ class Board extends Component {
         grid[savedRow][savedCol].isStart = false;
         grid[savedRow][savedCol].isEnd = false;
         grid[savedRow][savedCol].isPicked = false;
+
+        this.resetSearch();
 
         this.setState({
             grid,
