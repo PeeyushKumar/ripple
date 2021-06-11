@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/ripple/static/css/main.ab3c9035.chunk.css",
-    "main.js": "/ripple/static/js/main.9b7872e2.chunk.js",
-    "main.js.map": "/ripple/static/js/main.9b7872e2.chunk.js.map",
+    "main.css": "/ripple/static/css/main.799bfd76.chunk.css",
+    "main.js": "/ripple/static/js/main.499de0e4.chunk.js",
+    "main.js.map": "/ripple/static/js/main.499de0e4.chunk.js.map",
     "runtime-main.js": "/ripple/static/js/runtime-main.7810989d.js",
     "runtime-main.js.map": "/ripple/static/js/runtime-main.7810989d.js.map",
     "static/css/2.61b4cb56.chunk.css": "/ripple/static/css/2.61b4cb56.chunk.css",
@@ -10,14 +10,14 @@
     "static/js/2.9e873eb4.chunk.js.map": "/ripple/static/js/2.9e873eb4.chunk.js.map",
     "index.html": "/ripple/index.html",
     "static/css/2.61b4cb56.chunk.css.map": "/ripple/static/css/2.61b4cb56.chunk.css.map",
-    "static/css/main.ab3c9035.chunk.css.map": "/ripple/static/css/main.ab3c9035.chunk.css.map",
+    "static/css/main.799bfd76.chunk.css.map": "/ripple/static/css/main.799bfd76.chunk.css.map",
     "static/js/2.9e873eb4.chunk.js.LICENSE.txt": "/ripple/static/js/2.9e873eb4.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.7810989d.js",
     "static/css/2.61b4cb56.chunk.css",
     "static/js/2.9e873eb4.chunk.js",
-    "static/css/main.ab3c9035.chunk.css",
-    "static/js/main.9b7872e2.chunk.js"
+    "static/css/main.799bfd76.chunk.css",
+    "static/js/main.499de0e4.chunk.js"
   ]
 }
