@@ -20,7 +20,7 @@ class Board extends Component {
             endCol: null,
             
             showHelp: false,
-            found: false,
+            searching: false,
             drawingWall: false,
 
             savedRow: null,
@@ -91,7 +91,7 @@ class Board extends Component {
 
         this.setState({
             grid,
-            found: false,
+            searching: false,
             drawingWall: false,
         })
     }
@@ -117,7 +117,13 @@ class Board extends Component {
     startSearching = () => {
         const {grid, startRow, startCol} = this.state;
 
-        this.explore(grid, startRow, startCol);        
+        this.setState({
+            searching: true
+        })
+        
+        setTimeout(() => {
+            this.explore(grid, startRow, startCol);   
+        }, 0);
     }
 
     explore = (grid, fromRow, fromCol) => {
@@ -128,11 +134,11 @@ class Board extends Component {
 
         if (currentNode.isEnd) {
             this.setState({
-                found : true
+                searching : false
             })
         }
         
-        if (this.state.found || currentNode.isVisited || currentNode.isWall) return;
+        if (!this.state.searching || currentNode.isVisited || currentNode.isWall) return;
 
         currentNode.isVisited = true;
         grid[fromRow][fromCol] = currentNode;
