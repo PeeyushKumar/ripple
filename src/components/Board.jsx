@@ -21,10 +21,11 @@ class Board extends Component {
             
             showHelp: false,
             searching: false,
+            tracking: false,
             drawingWall: false,
 
             savedRow: null,
-            savedCol: null
+            savedCol: null,
         }
     }
 
@@ -142,11 +143,19 @@ class Board extends Component {
             currentNode.parentRow = parentRow;
             currentNode.parentCol = parentCol;
             grid[fromRow][fromCol] = currentNode;
+            
             this.setState({
                 grid,
                 searching : false
             })
+            
+            if (this.state.tracking) return;
+            
             this.track(currentNode.row, currentNode.col)
+            this.setState({
+                tracking: true
+            })
+            
         }
         
         if (!this.state.searching || currentNode.isVisited || currentNode.isWall) return;
@@ -181,7 +190,12 @@ class Board extends Component {
 
         
         const makePath = (grid, path, i) => {
-            if (path.length === 0) return;
+            if (path.length === 0) {
+                this.setState({
+                    tracking: false
+                })
+                return;
+            }
 
             const node = path.pop();
             const row = node.row;
@@ -197,16 +211,6 @@ class Board extends Component {
 
         let i = 0;
         makePath(grid, path, i);
-
-        // for (let i=0; i<path.length; i++) {
-        //     row = path[i].row;
-        //     col = path[i].col;
-
-        //     grid[row][col].isPath = true;
-        //     this.setState({
-        //         grid
-        //     })
-        // }
     }
 
     handleOnMouseUp = (row, col) => {
