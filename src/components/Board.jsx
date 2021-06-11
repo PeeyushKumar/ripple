@@ -161,6 +161,7 @@ class Board extends Component {
         
         grid[row][col].isStart = grid[savedRow][savedCol].isStart;
         grid[row][col].isEnd = grid[savedRow][savedCol].isEnd;
+        grid[row][col].isWall = false;
 
         if (grid[savedRow][savedCol].isStart) {
             startRow = row;
