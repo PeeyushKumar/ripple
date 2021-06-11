@@ -3,7 +3,7 @@ import React, {Component} from 'react'
 class Node extends Component {
     
     render() {
-        const {row, col, isStart, isEnd, isWall, isVisited, isPicked} = this.props;
+        const {row, col, isStart, isEnd, isWall, isVisited, isPicked, isPath} = this.props;
 
         let className = "node";
 
@@ -20,7 +20,10 @@ class Node extends Component {
             className += " node-visited";
         }
         if (isPicked) {
-            className += " node-picked"
+            className += " node-picked";
+        }
+        if (isPath) {
+            className += " node-path";
         }
 
         return(

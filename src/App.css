@@ -23,6 +23,18 @@ html {
   background-color: #22beee;
 }
 
+.node-path {
+  background-color: #ffec42;
+  border: 1px solid #ffec42;
+  opacity: 1;
+  /* transition-duration: 3s; */
+}
+
+.node-path:hover {
+  background-color: #ffe600;
+  opacity: 1;
+}
+
 .node-wall {
   border: solid 1px #646464;
   background-color: #3a3a3a;

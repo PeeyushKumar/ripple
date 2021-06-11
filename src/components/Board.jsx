@@ -61,7 +61,10 @@ class Board extends Component {
                     isEnd: rowIdx === endRow && nodeIdx === endCol,
                     isWall: false,
                     isVisited: false,
-                    isPicked: false
+                    isPicked: false,
+                    parentRow: null,
+                    parentCol: null,
+                    isPath: false
                 }
                 row.push(node);
             }
@@ -86,6 +89,9 @@ class Board extends Component {
             for (let nodeIdx=0; nodeIdx<noOfCols; nodeIdx++) {
                 grid[rowIdx][nodeIdx].isWall = false;
                 grid[rowIdx][nodeIdx].isVisited = false;
+                grid[rowIdx][nodeIdx].isPath = false;
+                grid[rowIdx][nodeIdx].parentRow = null;
+                grid[rowIdx][nodeIdx].parentCol = null;
             }
         }
 
@@ -120,27 +126,34 @@ class Board extends Component {
         this.setState({
             searching: true
         })
-        
+
         setTimeout(() => {
             this.explore(grid, startRow, startCol);   
         }, 0);
     }
 
-    explore = (grid, fromRow, fromCol) => {
+    explore = (grid, fromRow, fromCol, parentRow=null, parentCol=null) => {
 
         if (!this.isValidIndex(fromRow,fromCol)) return;
 
         const currentNode = grid[fromRow][fromCol];
 
         if (currentNode.isEnd) {
+            currentNode.parentRow = parentRow;
+            currentNode.parentCol = parentCol;
+            grid[fromRow][fromCol] = currentNode;
             this.setState({
+                grid,
                 searching : false
             })
+            this.track(currentNode.row, currentNode.col)
         }
         
         if (!this.state.searching || currentNode.isVisited || currentNode.isWall) return;
 
         currentNode.isVisited = true;
+        currentNode.parentRow = parentRow;
+        currentNode.parentCol = parentCol;
         grid[fromRow][fromCol] = currentNode;
 
         this.setState({
@@ -148,11 +161,52 @@ class Board extends Component {
         })
 
         setTimeout(() => {
-            this.explore(grid, fromRow, fromCol+1);
-            this.explore(grid, fromRow+1, fromCol);
-            this.explore(grid, fromRow, fromCol-1);
-            this.explore(grid, fromRow-1, fromCol);            
+            this.explore(grid, fromRow, fromCol+1, fromRow, fromCol);
+            this.explore(grid, fromRow+1, fromCol, fromRow, fromCol);
+            this.explore(grid, fromRow, fromCol-1, fromRow, fromCol);
+            this.explore(grid, fromRow-1, fromCol, fromRow, fromCol);            
         }, 1);
+    }
+
+    track = (row, col) => {
+        const {grid} = this.state;
+        const path = []
+        while (!grid[row][col].isStart) {
+            path.push(grid[row][col]);
+            const parentRow = grid[row][col].parentRow;
+            const parentCol = grid[row][col].parentCol;
+            row = parentRow;
+            col = parentCol;
+        }
+
+        
+        const makePath = (grid, path, i) => {
+            if (path.length === 0) return;
+
+            const node = path.pop();
+            const row = node.row;
+            const col = node.col;
+            grid[row][col].isPath = true;
+            this.setState({
+                grid
+            })
+            setTimeout(() => {
+                makePath(grid, path, i+1)
+            }, 10);
+        }
+
+        let i = 0;
+        makePath(grid, path, i);
+
+        // for (let i=0; i<path.length; i++) {
+        //     row = path[i].row;
+        //     col = path[i].col;
+
+        //     grid[row][col].isPath = true;
+        //     this.setState({
+        //         grid
+        //     })
+        // }
     }
 
     handleOnMouseUp = (row, col) => {
@@ -189,6 +243,9 @@ class Board extends Component {
 
     handleOnMouseDown = (row, col) => {
         const {grid, savedRow, savedCol} = this.state;
+
+        console.log(grid[row][col])
+
 
         if (!grid[row][col].isStart && !grid[row][col].isEnd) {
             grid[row][col].isWall = true;
