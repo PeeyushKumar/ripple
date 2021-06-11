@@ -181,23 +181,45 @@ class Board extends Component {
         const {grid} = this.state;
         const path = []
         while (!grid[row][col].isStart) {
-            path.push(grid[row][col]);
+            path.unshift(grid[row][col]);
             const parentRow = grid[row][col].parentRow;
             const parentCol = grid[row][col].parentCol;
             row = parentRow;
             col = parentCol;
         }
 
-        
+        const travel = (grid, path, i) => {
+            if (i >= path.length-1) return;
+
+            const node = path[i];
+            const row = node.row;
+            const col = node.col;
+            const {startRow, startCol} = this.state;
+            
+            grid[startRow][startCol].isStart = false;
+            grid[row][col].isPath = false;
+            grid[row][col].isStart = true;
+
+            this.setState({
+                grid,
+                startRow: row,
+                startCol: col,
+            })
+            setTimeout(() => {
+                travel(grid, path, i+1)
+            }, 10);
+        }
+
         const makePath = (grid, path, i) => {
-            if (path.length === 0) {
+            if (i >= path.length) {
                 this.setState({
                     tracking: false
                 })
+                travel(grid, path, 0);
                 return;
             }
 
-            const node = path.pop();
+            const node = path[i];
             const row = node.row;
             const col = node.col;
             grid[row][col].isPath = true;

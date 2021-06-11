@@ -27,7 +27,7 @@ html {
   background-color: #ffec42;
   border: 1px solid #ffec42;
   opacity: 1;
-  /* transition-duration: 3s; */
+  transition-duration: 0.5s;
 }
 
 .node-path:hover {
@@ -45,6 +45,7 @@ html {
   background-color: #3a0ca3;
   border: solid 1px #340b94;
   opacity: 1;
+  transition-duration: 0.5s;
 }
 
 .node-start:hover {
