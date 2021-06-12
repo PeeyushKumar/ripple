@@ -239,49 +239,6 @@ class Board extends Component {
         makePath(grid, path, i);
     }
 
-    // depthFirstSearch = (grid, fromRow, fromCol, parentRow, parentCol) => {
-    //     if (!this.isValidIndex(startRow, startCol)) return;
-
-    //     const currentNode = grid[fromRow][fromCol];
-
-    //     if (currentNode.isEnd) {
-    //         currentNode.parentRow = parentRow;
-    //         currentNode.parentCol = parentCol;
-    //         grid[fromRow][fromCol] = currentNode;
-            
-    //         this.setState({
-    //             grid,
-    //             searching : false
-    //         })
-            
-    //         if (this.state.tracking) return;
-            
-    //         this.track(currentNode.row, currentNode.col)
-    //         this.setState({
-    //             tracking: true
-    //         })
-            
-    //     }
-
-    //     if (!this.state.searching || currentNode.isVisited || currentNode.isWall) return;
-
-    //     currentNode.isVisited = true;
-    //     currentNode.parentRow = parentRow;
-    //     currentNode.parentCol = parentCol;
-    //     grid[fromRow][fromCol] = currentNode;
-
-    //     this.setState({
-    //         grid
-    //     })
-
-    //     setTimeout(() => {
-    //         this.explore(grid, fromRow, fromCol+1, fromRow, fromCol);
-    //         this.explore(grid, fromRow+1, fromCol, fromRow, fromCol);
-    //         this.explore(grid, fromRow, fromCol-1, fromRow, fromCol);
-    //         this.explore(grid, fromRow-1, fromCol, fromRow, fromCol);            
-    //     }, 1);
-    // }
-
     erazeNode = (row, col, primary=true, wall=true) => {
         const {grid} = this.state;
 
