@@ -27,6 +27,7 @@ class Node extends Component {
 
         return(
             <div
+                onContextMenu={(event) => this.props.handleOnContextMenu(event, row, col)}
                 onMouseUp={() => this.props.handleOnMouseUp(row, col)}
                 onMouseDown={() => this.props.handleOnMouseDown(row, col)}
                 onMouseEnter={() => this.props.handleOnMouseEnter(row, col)}
