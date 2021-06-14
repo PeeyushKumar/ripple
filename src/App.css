@@ -40,21 +40,41 @@ html {
 }
 
 .node-visited {
-  background-color: #4cc9f0;
   border: 1px solid #a7eaff;
   opacity: 0.7;
+  animation: balloon 0.5s ease;
+  animation-direction: alternate;
 }
 
-.node-visited:hover {
-  transition-duration: 0s;
-  background-color: #22beee;
+@keyframes balloon {
+  0% {
+    height: 0%;
+    width: 0%;
+    margin: 50%;
+    border-radius: 10px;
+    background-color: #4cc9f0;
+  }
+  70% {
+    height: 130%;
+    width: 130%;
+    margin: -15%;
+    border-radius: 13px;
+    background-color: #ac00f0;
+  }
+  100% {
+    height: 0%;
+    width: 0%;
+    margin: 50%;
+    border-radius: 10px;
+    background-color: #4cc9f0;
+  }
 }
 
 .node-path {
   background-color: #ffec42;
   border: 1px solid #ffec42;
   opacity: 1;
-  transition-duration: 1s;
+  z-index: 2;
 }
 
 .node-path:hover {
