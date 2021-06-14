@@ -23,6 +23,8 @@ const Help = (props) => {
                 <p>Click and Drag Start or End Tile to move them to a new location.</p>
                 <h4>Add Walls</h4>
                 <p>Drag across blank spaces to create a wall.</p>
+                <h4>Remove Walls</h4>
+                <p>Drag on walls to remove them.</p>
                 <h4>Enjoy</h4>
                 <p>Hit go to start the simulation.</p>
             </Modal.Body>
