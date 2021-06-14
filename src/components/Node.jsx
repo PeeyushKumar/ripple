@@ -5,7 +5,7 @@ class Node extends Component {
     render() {
         const {row, col, isStart, isEnd, isWall, isVisited, isPath, movingStart, movingEnd} = this.props;
 
-        let className = "node";
+        let className="node";
 
         if (isStart) {
             className += " node-start";
@@ -27,11 +27,13 @@ class Node extends Component {
 
         return(
             <div
+                className="node-container"
                 onDragStart={(e) => {e.preventDefault()}}
                 onMouseDown={() => this.props.handleOnMouseDown(row, col)}
                 onMouseEnter={() => this.props.handleOnMouseEnter(row, col)}
-                className={className}
-            ></div>
+            >
+                <div className={className}></div>
+            </div>
         );
     }
 }
