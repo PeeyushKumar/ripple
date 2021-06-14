@@ -88,16 +88,13 @@ html {
   }
 }
 
-
 .node-start {
   background-color: #3a0ca3;
   border: solid 1px #340b94;
   opacity: 1;
-  transition-duration: 0.5s;
 }
 
 .node-start:hover {
-  transition-duration: 0s;
   background-color: #340b94;
 }
 
@@ -108,10 +105,24 @@ html {
 }
 
 .node-end:hover {
-  transition-duration: 0s;
   background-color: #ff0073;
 }
 
 .node-moving {
-  opacity: 0.6;
+  opacity: 0.8;
+  animation: float 0.5s ease forwards;
+}
+
+@keyframes float {
+  0% {
+    height: 100%;
+    width: 100%;
+    margin: 0%;
+  }
+  100% {
+    height: 50%;
+    width: 50%;
+    margin: 25%;
+    border-radius: 7px;
+  }
 }
