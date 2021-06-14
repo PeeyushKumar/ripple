@@ -93,6 +93,11 @@ class Board extends Component {
     resetSearch = () => {
         const {noOfRows, noOfCols} = this.state;
 
+        this.setState({
+            searching: false,
+            tracking: false
+        })
+
         for(let rowIdx=0; rowIdx<noOfRows; rowIdx++) {
             for (let nodeIdx=0; nodeIdx<noOfCols; nodeIdx++) {
                 this.erazeNode(rowIdx, nodeIdx, false, false);
