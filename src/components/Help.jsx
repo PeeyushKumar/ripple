@@ -19,8 +19,8 @@ const Help = (props) => {
             </Modal.Header>
 
             <Modal.Body>
-                <h4>Move Tiles</h4>
-                <p>Click and Drag Start or End Tile to move them to a new location.</p>
+                <h4>Move Nodes</h4>
+                <p>Click and Drag Start or End Node to move them to a new location.</p>
                 <h4>Add Walls</h4>
                 <p>Drag across blank spaces to create a wall.</p>
                 <h4>Remove Walls</h4>
