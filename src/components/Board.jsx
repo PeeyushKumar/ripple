@@ -23,6 +23,7 @@ class Board extends Component {
             searching: false,
             tracking: false,
             drawingWall: false,
+            erazingWall: false,
             movingStart: false,
             movingEnd: false,   
         }
@@ -327,19 +328,24 @@ class Board extends Component {
         })
     }
 
-    handleOnMouseUp = (row, col) => {
+    erazeWall = (row, col) => {
+        this.erazeNode(row, col, false, true);
+    }
+
+    handleOnMouseUp = () => {
         this.setState({
             drawingWall: false,
             movingStart: false,
-            movingEnd: false
+            movingEnd: false,
+            erazingWall: false
         })
     }
 
     handleOnMouseDown = (row, col) => {
-        const {grid, drawingWall, movingStart, movingEnd} = this.state;
+        const {grid, drawingWall, erazingWall, movingStart, movingEnd} = this.state;
 
         if (grid[row][col].isStart) {
-            if (!drawingWall && !movingEnd) {
+            if (!drawingWall && !erazingWall && !movingEnd) {
                 this.setState({
                     movingStart: true,
                 })
@@ -347,18 +353,29 @@ class Board extends Component {
         }
 
         else if (grid[row][col].isEnd) {
-            if (!drawingWall && !movingStart) {
+            if (!drawingWall && !erazingWall && !movingStart) {
                 this.setState({
                     movingEnd: true,
                 })
             }
         }
 
-        else if (!movingStart && !movingEnd) {
-            this.makeWall(row, col)
-            this.setState({
-                drawingWall: true
-            })
+        else if (grid[row][col].isWall) {
+            if (!drawingWall && !movingStart && !movingEnd) {
+                this.erazeWall(row, col);
+                this.setState({
+                    erazingWall: true
+                })
+            }
+        }
+
+        else {
+            if (!erazingWall && !movingStart && !movingEnd) {
+                this.makeWall(row, col)
+                this.setState({
+                    drawingWall: true
+                })
+            }
         }
 
         this.resetSearch();
@@ -366,9 +383,14 @@ class Board extends Component {
 
     handleOnMouseEnter = (row, col) => {
 
-        const {grid, drawingWall, movingStart, movingEnd} = this.state; 
+        const {grid, drawingWall, erazingWall, movingStart, movingEnd} = this.state; 
 
-        if (grid[row][col].isStart || grid[row][col].isEnd || grid[row][col].isWall) {
+        if (grid[row][col].isStart || grid[row][col].isEnd) {
+            return;
+        }
+
+        if (grid[row][col].isWall) {
+            if (erazingWall) this.erazeWall(row, col);
             return;
         }
 
@@ -378,16 +400,15 @@ class Board extends Component {
 
     }
 
-    handleOnContextMenu = (event, row, col) => {
-        event.preventDefault();
-        this.erazeNode(row, col, false);
-    }
-
     render() {
         const {grid} = this.state;
 
         return (
-            <div>
+            <div 
+                onContextMenu={e => e.preventDefault()}
+                onMouseUp={this.handleOnMouseUp}
+                className="board"
+            >
                 <Help
                     closeHelp={this.closeHelp}
                     show={this.state.showHelp}
@@ -406,11 +427,9 @@ class Board extends Component {
                             row.map((node, nodeIdx) => (
                                 <Node
                                     {...node}
+                                    key={nodeIdx}
                                     movingStart={this.state.movingStart}
                                     movingEnd={this.state.movingEnd}
-                                    key={nodeIdx}
-                                    handleOnContextMenu={this.handleOnContextMenu}
-                                    handleOnMouseUp={this.handleOnMouseUp}
                                     handleOnMouseDown={this.handleOnMouseDown}
                                     handleOnMouseEnter={this.handleOnMouseEnter}
                                 ></Node>

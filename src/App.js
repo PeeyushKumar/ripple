@@ -6,7 +6,7 @@ function App() {
 
   return (
     <div className="App">
-      <Board />
+      <Board onDragStart={(e) => {e.preventDefault()}} />
     </div>
   );
 }

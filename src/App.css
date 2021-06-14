@@ -68,6 +68,10 @@ html {
   opacity: 0.6;
 }
 
+.board {
+  height: 100vh;
+}
+
 .node-group {
   margin: auto;
   align-items: center;
