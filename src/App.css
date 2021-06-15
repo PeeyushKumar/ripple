@@ -73,7 +73,9 @@ html {
   background-color: #ffec42;
   border: 1px solid #ffec42;
   opacity: 1;
-  animation: squeez 0.5s ease forwards;
+  animation: squeez 0.3s ease;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
 }
 
 @keyframes squeez {
