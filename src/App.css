@@ -40,8 +40,8 @@ html {
 }
 
 .node-visited {
-  border: 1px solid #a7eaff;
-  opacity: 0.7;
+  border: 1px solid #4cc9f0;
+  opacity: 0.6;
   animation: balloon 0.5s ease;
 }
 
