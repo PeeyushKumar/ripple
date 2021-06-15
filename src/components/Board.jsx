@@ -188,16 +188,16 @@ class Board extends Component {
 
         setTimeout(() => {
             this.explore(grid, fromRow, fromCol+1, fromRow, fromCol);        
-        }, 1);
+        }, 10);
         setTimeout(() => {
             this.explore(grid, fromRow+1, fromCol, fromRow, fromCol);
-        }, 1);
+        }, 10);
         setTimeout(() => {
             this.explore(grid, fromRow, fromCol-1, fromRow, fromCol);
-        }, 1);
+        }, 10);
         setTimeout(() => {
             this.explore(grid, fromRow-1, fromCol, fromRow, fromCol);            
-        }, 1);
+        }, 10);
 
     }
 
@@ -255,7 +255,7 @@ class Board extends Component {
             })
             setTimeout(() => {
                 makePath(grid, path, i+1)
-            }, 10);
+            }, 15);
         }
 
         makePath(grid, path, 1);

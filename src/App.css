@@ -54,9 +54,9 @@ html {
     background-color: #4cc9f0;
   }
   70% {
-    height: 130%;
-    width: 130%;
-    margin: -15%;
+    height: 150%;
+    width: 150%;
+    margin: -25%;
     border-radius: 13px;
     background-color: #ac00f0;
   }
@@ -73,7 +73,7 @@ html {
   background-color: #ffec42;
   border: 1px solid #ffec42;
   opacity: 1;
-  animation: squeez 0.3s ease;
+  animation: squeez 0.5s ease;
   animation-direction: alternate;
   animation-iteration-count: infinite;
 }
