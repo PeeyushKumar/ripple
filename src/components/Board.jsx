@@ -106,6 +106,20 @@ class Board extends Component {
         }
     }
 
+    resetVisited = () => {
+        const {grid, noOfRows, noOfCols} = this.state;
+
+        for(let rowIdx=0; rowIdx<noOfRows; rowIdx++) {
+            for (let nodeIdx=0; nodeIdx<noOfCols; nodeIdx++) {
+                grid[rowIdx][nodeIdx].isVisited = false;
+            }
+        }
+
+        this.setState({
+            grid
+        })
+    }
+
     showHelp = () => {
         this.setState({
             showHelp: true
@@ -191,15 +205,15 @@ class Board extends Component {
         const {grid} = this.state;
         const path = []
         while (!grid[row][col].isStart) {
-            path.unshift(grid[row][col]);
             const parentRow = grid[row][col].parentRow;
             const parentCol = grid[row][col].parentCol;
             row = parentRow;
             col = parentCol;
+            path.unshift(grid[row][col]);
         }
 
         const travel = (grid, path, i) => {
-            if (i >= path.length-1) return;
+            if (i >= path.length) return;
 
             const node = path[i];
             const row = node.row;
@@ -215,6 +229,9 @@ class Board extends Component {
                 startRow: row,
                 startCol: col,
             })
+
+            this.resetVisited()
+
             setTimeout(() => {
                 travel(grid, path, i+1)
             }, 10);
@@ -241,8 +258,7 @@ class Board extends Component {
             }, 10);
         }
 
-        let i = 0;
-        makePath(grid, path, i);
+        makePath(grid, path, 1);
     }
 
     erazeNode = (row, col, primary=true, wall=true) => {
