@@ -242,7 +242,7 @@ class Board extends Component {
                 this.setState({
                     tracking: false
                 })
-                travel(grid, path, 0);
+                // travel(grid, path, 0);
                 return;
             }
 
