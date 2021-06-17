@@ -9,21 +9,19 @@ class Node extends Component {
 
         if (isStart) {
             className += " node-start";
-            movingStart ? className += " node-moving" : console.log('');
+            if (movingStart) className += " node-moving";
         }
+        
         if (isEnd) {
             className += " node-end";
-            movingEnd ? className += " node-moving" : console.log('');
+            if (movingEnd) className += " node-moving";
         }
-        if (isWall) {
-            className += " node-wall";
-        }
-        if (isVisited) {
-            className += " node-visited";
-        }
-        if (isPath) {
-            className += " node-path";
-        }
+        
+        if (isWall) className += " node-wall";
+            
+        if (isVisited) className += " node-visited";
+
+        if (isPath) className += " node-path";
 
         return(
             <div
