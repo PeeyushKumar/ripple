@@ -217,37 +217,11 @@ class Board extends Component {
             path.unshift(grid[row][col]);
         }
 
-        const travel = (grid, path, i) => {
-            if (i >= path.length) return;
-
-            const node = path[i];
-            const row = node.row;
-            const col = node.col;
-            const {startRow, startCol} = this.state;
-            
-            grid[startRow][startCol].isStart = false;
-            grid[row][col].isPath = false;
-            grid[row][col].isStart = true;
-
-            this.setState({
-                grid,
-                startRow: row,
-                startCol: col,
-            })
-
-            this.resetVisited()
-
-            setTimeout(() => {
-                travel(grid, path, i+1)
-            }, 10);
-        }
-
         const makePath = (grid, path, i) => {
             if (i >= path.length) {
                 this.setState({
                     tracking: false
                 })
-                // travel(grid, path, 0);
                 return;
             }
 
