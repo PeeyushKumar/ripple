@@ -88,6 +88,11 @@ class Board extends Component {
     reset = () => {
         const {startRow, startCol, endRow, endCol} = this.state;
 
+        this.setState({
+            searching: false,
+            tracking: false
+        })
+
         this.createGrid(startRow, startCol, endRow, endCol);
     }
 
@@ -246,6 +251,8 @@ class Board extends Component {
                 return;
             }
 
+            if (!this.state.tracking) return;
+
             const node = path[i];
             const row = node.row;
             const col = node.col;
@@ -257,6 +264,10 @@ class Board extends Component {
                 makePath(grid, path, i+1)
             }, 15);
         }
+
+        this.setState({
+            tracking: true
+        })
 
         makePath(grid, path, 1);
     }
