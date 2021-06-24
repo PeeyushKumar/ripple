@@ -10,7 +10,7 @@ class Board extends Component {
         super(props);
         
         this.state = {
-            grid: [[]],
+            grid: null,
             noOfRows: null,
             noOfCols: null,
 
@@ -420,25 +420,30 @@ class Board extends Component {
                     startSearching={this.startSearching}
                     reset={this.reset}
                 ></Panel>
-                
-                <div className="node-group">
-                    {
-                        grid.map((row, rowIdx) => (
-                            <div key={rowIdx} className="node-row">{
-                            row.map((node, nodeIdx) => (
-                                <Node
-                                    {...node}
-                                    key={nodeIdx}
-                                    movingStart={this.state.movingStart}
-                                    movingEnd={this.state.movingEnd}
-                                    handleOnMouseDown={this.handleOnMouseDown}
-                                    handleOnMouseEnter={this.handleOnMouseEnter}
-                                ></Node>
-                            ))}
-                            </div>
-                        ))
-                    }
-                </div>
+
+                {
+                    this.state.grid === null ?
+                    'Loading...' :
+                    <div className="node-group">
+                        {
+                            grid.map((row, rowIdx) => (
+                                <div key={rowIdx} className="node-row">{
+                                row.map((node, nodeIdx) => (
+                                    <Node
+                                        {...node}
+                                        key={nodeIdx}
+                                        movingStart={this.state.movingStart}
+                                        movingEnd={this.state.movingEnd}
+                                        handleOnMouseDown={this.handleOnMouseDown}
+                                        handleOnMouseEnter={this.handleOnMouseEnter}
+                                    ></Node>
+                                ))}
+                                </div>
+                            ))
+                        }
+                    </div>
+                }
+
             </div>
         );
     }
