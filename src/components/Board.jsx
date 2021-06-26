@@ -81,49 +81,20 @@ class Board extends Component {
             startRow,
             startCol,
             endRow,
-            endCol       
+            endCol,
+            searching: false,
+            tracking: false
         })
     } 
 
+    getGrid = () => this.state.grid.map(row => row.map(node => ({...node})));
+
     reset = () => {
         const {startRow, startCol, endRow, endCol} = this.state;
-
-        this.setState({
-            searching: false,
-            tracking: false
-        })
-
         this.createGrid(startRow, startCol, endRow, endCol);
     }
 
-    resetSearch = () => {
-        const {noOfRows, noOfCols} = this.state;
-
-        this.setState({
-            searching: false,
-            tracking: false
-        })
-
-        for(let rowIdx=0; rowIdx<noOfRows; rowIdx++) {
-            for (let nodeIdx=0; nodeIdx<noOfCols; nodeIdx++) {
-                this.erazeNode(rowIdx, nodeIdx, false, false);
-            }
-        }
-    }
-
-    resetVisited = () => {
-        const {grid, noOfRows, noOfCols} = this.state;
-
-        for(let rowIdx=0; rowIdx<noOfRows; rowIdx++) {
-            for (let nodeIdx=0; nodeIdx<noOfCols; nodeIdx++) {
-                grid[rowIdx][nodeIdx].isVisited = false;
-            }
-        }
-
-        this.setState({
-            grid
-        })
-    }
+    clearSearch = (grid) => grid.forEach(row => row.forEach(node => this.clearNode(grid, node.row, node.col)));
 
     showHelp = () => {
         this.setState({
@@ -246,91 +217,39 @@ class Board extends Component {
         makePath(grid, path, 1);
     }
 
-    erazeNode = (row, col, primary=true, wall=true) => {
-        const {grid} = this.state;
+    erazeNode = (grid, row, col) => {
+        this.clearNode(grid, row, col)
+        grid[row][col].isStart = false;
+        grid[row][col].isEnd = false;
+        grid[row][col].isWall = false;   
+    }
 
-        if (primary)  {
-            grid[row][col].isStart = false;
-            grid[row][col].isEnd = false;
-        }
-
-        if (wall) {
-            grid[row][col].isWall = false;
-        }
-
+    clearNode = (grid, row, col) => {
         grid[row][col].isVisited = false;        
         grid[row][col].isPath = false;
         grid[row][col].parentRow = null;
         grid[row][col].parentCol = null;
-
-        this.setState({
-            grid
-        })
     }
 
-    erazeStart = () => {
+    moveStart = (grid, row, col) => {
         const {startRow, startCol} = this.state;
-        
-        this.erazeNode(startRow, startCol);
-        
-        this.setState({
-            startRow: null,
-            startCol: null
-        })
-    }
 
-    erazeEnd = () => {
-        const {endRow, endCol} = this.state;
-        
-        this.erazeNode(endRow, endCol);
-        
-        this.setState({
-            endRow: null,
-            endCol: null
-        })
-    }
-
-    moveStart = (row, col) => {
-        const {grid} = this.state;
-
-        this.erazeStart();
-        this.erazeNode(row, col);
+        this.erazeNode(grid, startRow, startCol);
+        this.erazeNode(grid, row, col);
         grid[row][col].isStart = true;
-
-        this.setState({
-            grid,
-            startRow: row,
-            startCol: col,
-        })
     }
 
-    moveEnd = (row, col) => {
-        const {grid} = this.state;
+    moveEnd = (grid, row, col) => {
+        const {endRow, endCol} = this.state;
 
-        this.erazeEnd();
-        this.erazeNode(row, col);
+        this.erazeNode(grid, endRow, endCol);
+        this.erazeNode(grid, row, col);
         grid[row][col].isEnd = true;
-
-        this.setState({
-            grid,
-            endRow: row,
-            endCol: col,
-        })
     }
 
-    makeWall = (row, col) => {
-        const {grid} = this.state;
-
-        this.erazeNode(row, col);
+    makeWall = (grid, row, col) => {
+        this.erazeNode(grid, row, col);
         grid[row][col].isWall = true;
-
-        this.setState({
-            grid,
-        })
-    }
-
-    erazeWall = (row, col) => {
-        this.erazeNode(row, col, false, true);
     }
 
     handleOnMouseUp = () => {
@@ -343,62 +262,80 @@ class Board extends Component {
     }
 
     handleOnMouseDown = (row, col) => {
-        const {grid, drawingWall, erazingWall, movingStart, movingEnd} = this.state;
+        let {drawingWall, erazingWall, movingStart, movingEnd} = this.state;
+        const grid = this.getGrid();
 
         if (grid[row][col].isStart) {
             if (!drawingWall && !erazingWall && !movingEnd) {
-                this.setState({
-                    movingStart: true,
-                })
+                movingStart = true;
             }  
         }
 
         else if (grid[row][col].isEnd) {
             if (!drawingWall && !erazingWall && !movingStart) {
-                this.setState({
-                    movingEnd: true,
-                })
+                movingEnd = true;
             }
         }
 
         else if (grid[row][col].isWall) {
             if (!drawingWall && !movingStart && !movingEnd) {
-                this.erazeWall(row, col);
-                this.setState({
-                    erazingWall: true
-                })
+                this.erazeNode(grid, row, col);
+                erazingWall = true;
             }
         }
 
         else {
             if (!erazingWall && !movingStart && !movingEnd) {
-                this.makeWall(row, col)
-                this.setState({
-                    drawingWall: true
-                })
+                this.makeWall(grid, row, col)
+                drawingWall = true;
             }
         }
 
-        this.resetSearch();
+        this.clearSearch(grid)
+
+        this.setState({
+            grid,
+            movingStart,
+            movingEnd,
+            drawingWall,
+            erazingWall,
+            searching: false,
+            tracking: false
+        })
     }
 
     handleOnMouseEnter = (row, col) => {
 
-        const {grid, drawingWall, erazingWall, movingStart, movingEnd} = this.state; 
+        let {startRow, startCol, endRow, endCol, movingStart, movingEnd, drawingWall, erazingWall} = this.state; 
+        const grid = this.getGrid();
+        
+        if (grid[row][col].isStart || grid[row][col].isEnd) return;
 
-        if (grid[row][col].isStart || grid[row][col].isEnd) {
-            return;
+        else if (grid[row][col].isWall) {
+            if (erazingWall) this.erazeNode(grid, row, col);
         }
 
-        if (grid[row][col].isWall) {
-            if (erazingWall) this.erazeWall(row, col);
-            return;
+        else if (movingStart) {
+            this.moveStart(grid, row, col);
+            startRow = row;
+            startCol = col;
         }
 
-        if (movingStart) this.moveStart(row, col);
-        if (movingEnd) this.moveEnd(row, col);
-        if (drawingWall) this.makeWall(row, col);
+        else if (movingEnd) {
+            this.moveEnd(grid, row, col);
+            endRow = row;
+            endCol = col;
+        }
 
+        else if (drawingWall) this.makeWall(grid, row, col);
+
+        this.setState({
+            grid,
+            startRow,
+            startCol,
+            endRow,
+            endCol
+        });
     }
 
     render() {
@@ -425,9 +362,9 @@ class Board extends Component {
                     this.state.grid === null ?
                     'Loading...' :
                     <div className="node-group">
-                        {
-                            grid.map((row, rowIdx) => (
-                                <div key={rowIdx} className="node-row">{
+                    {
+                        grid.map((row, rowIdx) => (
+                            <div key={rowIdx} className="node-row">{
                                 row.map((node, nodeIdx) => (
                                     <Node
                                         {...node}
@@ -438,9 +375,9 @@ class Board extends Component {
                                         handleOnMouseEnter={this.handleOnMouseEnter}
                                     ></Node>
                                 ))}
-                                </div>
-                            ))
-                        }
+                            </div>
+                        ))
+                    }
                     </div>
                 }
 
