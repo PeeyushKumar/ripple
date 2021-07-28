@@ -89,28 +89,20 @@ html {
 }
 
 .cell-path {
-  background-color: #ffec42;
-  border: 1px solid #ffec42;
-  opacity: 1;
-  animation: squeez 0.5s ease;
-  animation-direction: alternate;
-  animation-iteration-count: infinite;
+  background-color: #42aaff;
+  border: 1px solid #42aaff;
+  opacity: 0.9;
+  animation: spring 0.5s ease 0s forwards, breath 0.6s ease-in 0.5s infinite alternate;
 }
 
-@keyframes squeez {
+@keyframes breath {
   0% {
-    height: 100%;
-    width: 100%;
-    margin: 0%;
-    border-radius: 10px;
-    background-color: #ffec42;
+    background-color: #42aaff;
+    border: 1px solid #42aaff;
   }
   100% {
-    height: 50%;
-    width: 50%;
-    margin: 25%;
-    border-radius: 13px;
-    background-color: #ff4242;
+    background-color: #6542ff;
+    border: 1px solid #6542ff;
   }
 }
 
@@ -152,14 +144,15 @@ html {
 }
 
 .cell-end {
-  background-color: #ff4699;
-  border: solid 1px #ff4699;
+  background-color: #3a0ca3;
+  border: solid 1px #340b94;
+  
   opacity: 1;
   animation: sprout 0.8s ease forwards;
 }
 
 .cell-end:hover {
-  background-color: #ff0073;
+  background-color: #340b94;
 }
 
 @keyframes sprout {
