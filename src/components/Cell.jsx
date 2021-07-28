@@ -1,31 +1,31 @@
 import React, {Component} from 'react'
 
-class Node extends Component {
+class Cell extends Component {
     
     render() {
         const {row, col, isStart, isEnd, isWall, isVisited, isPath, movingStart, movingEnd} = this.props;
 
-        let className="node";
+        let className="cell";
 
         if (isStart) {
-            className += " node-start";
-            if (movingStart) className += " node-moving";
+            className += " cell-start";
+            if (movingStart) className += " cell-moving";
         }
         
         if (isEnd) {
-            className += " node-end";
-            if (movingEnd) className += " node-moving";
+            className += " cell-end";
+            if (movingEnd) className += " cell-moving";
         }
         
-        if (isWall) className += " node-wall";
+        if (isWall) className += " cell-wall";
             
-        if (isVisited) className += " node-visited";
+        if (isVisited) className += " cell-visited";
 
-        if (isPath) className += " node-path";
+        if (isPath) className += " cell-path";
 
         return(
             <div
-                className="node-container"
+                className="cell-container"
                 onDragStart={(e) => {e.preventDefault()}}
                 onMouseDown={() => this.props.handleOnMouseDown(row, col)}
                 onMouseEnter={() => this.props.handleOnMouseEnter(row, col)}
@@ -36,4 +36,4 @@ class Node extends Component {
     }
 }
 
-export default Node;
+export default Cell;

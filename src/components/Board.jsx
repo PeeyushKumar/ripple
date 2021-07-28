@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Help from './Help'
 import Panel from './Panel';
-import Node from './Node';
+import Cell from './Cell';
 
 
 class Board extends Component {
@@ -65,19 +65,15 @@ class Board extends Component {
         }
 
         const grid = [];
-        for (let rowIdx=0; rowIdx<noOfRows; rowIdx++) {
+        for (let i=0; i<noOfRows; i++) {
             const row = []
-            for (let nodeIdx=0; nodeIdx<noOfCols; nodeIdx++) {
-                const node = {
-                    row: rowIdx,
-                    col: nodeIdx,
-                    isWall: false,
-                    isVisited: false,
-                    isPath: false,
-                    parentRow: null,
-                    parentCol: null,
+            for (let j=0; j<noOfCols; j++) {
+                const cell = {
+                    ...this.defaultCell,
+                    row: i,
+                    col: j,
                 }
-                row.push(node);
+                row.push(cell);
             }
             grid.push(row);
         }
@@ -159,12 +155,12 @@ class Board extends Component {
 
         if (!this.isValidIndex(fromRow,fromCol)) return;
 
-        const currentNode = grid[fromRow][fromCol];
+        const currentCell = grid[fromRow][fromCol];
 
-        if (this.isEnd(currentNode.row, currentNode.col)) {
-            currentNode.parentRow = parentRow;
-            currentNode.parentCol = parentCol;
-            grid[fromRow][fromCol] = currentNode;
+        if (this.isEnd(currentCell.row, currentCell.col)) {
+            currentCell.parentRow = parentRow;
+            currentCell.parentCol = parentCol;
+            grid[fromRow][fromCol] = currentCell;
             
             this.setState({
                 grid,
@@ -173,19 +169,19 @@ class Board extends Component {
             
             if (this.state.tracking) return;
             
-            this.track(currentNode.row, currentNode.col)
+            this.track(currentCell.row, currentCell.col)
             this.setState({
                 tracking: true
             })
             
         }
         
-        if (!this.state.searching || currentNode.isVisited || currentNode.isWall) return;
+        if (!this.state.searching || currentCell.isVisited || currentCell.isWall) return;
 
-        currentNode.isVisited = true;
-        currentNode.parentRow = parentRow;
-        currentNode.parentCol = parentCol;
-        grid[fromRow][fromCol] = currentNode;
+        currentCell.isVisited = true;
+        currentCell.parentRow = parentRow;
+        currentCell.parentCol = parentCol;
+        grid[fromRow][fromCol] = currentCell;
 
         this.setState({
             grid
@@ -227,9 +223,9 @@ class Board extends Component {
 
             if (!this.state.tracking) return;
 
-            const node = path[i];
-            const row = node.row;
-            const col = node.col;
+            const cell = path[i];
+            const row = cell.row;
+            const col = cell.col;
             grid[row][col].isPath = true;
             this.setState({
                 grid
@@ -250,7 +246,7 @@ class Board extends Component {
         return grid.map((cellRow, i) => cellRow.map((cell, j) => ((i === row && j === col) ? {...cell, ...changes} : cell)));
     }
 
-    erazeNode = (grid, row, col) => {
+    erazeCell = (grid, row, col) => {
 
         const changes = {
             ...this.defaultCell,
@@ -259,11 +255,10 @@ class Board extends Component {
         }
 
         grid = this.changeCell(grid, row, col, changes)
-
         return grid;
     }
 
-    clearNode = (grid, row, col) => {
+    clearCell = (grid, row, col) => {
 
         const changes = {
             isVisited: false,
@@ -315,7 +310,7 @@ class Board extends Component {
 
         else if (grid[row][col].isWall) {
             if (!drawingWall && !movingStart && !movingEnd) {
-                grid = this.erazeNode(grid, row, col);
+                grid = this.erazeCell(grid, row, col);
                 erazingWall = true;
             }
         }
@@ -347,7 +342,7 @@ class Board extends Component {
         if (this.isStart(row, col) || this.isEnd(row, col)) return;
 
         else if (grid[row][col].isWall) {
-            if (erazingWall) grid = this.erazeNode(grid, row, col);
+            if (erazingWall) grid = this.erazeCell(grid, row, col);
         }
 
         else if (movingStart) {
@@ -394,21 +389,21 @@ class Board extends Component {
                 {
                     this.state.grid === null ?
                     'Loading...' :
-                    <div className="node-group">
+                    <div className="cell-group">
                     {
-                        grid.map((row, rowIdx) => (
-                            <div key={rowIdx} className="node-row">{
-                                row.map((node, nodeIdx) => (
-                                    <Node
-                                        {...node}
-                                        key={nodeIdx}
-                                        isStart={this.isStart(rowIdx, nodeIdx)}
-                                        isEnd={this.isEnd(rowIdx, nodeIdx)}
+                        grid.map((cellRow, i) => (
+                            <div key={i} className="cell-row">{
+                                cellRow.map((cell, j) => (
+                                    <Cell
+                                        {...cell}
+                                        key={j}
+                                        isStart={this.isStart(i, j)}
+                                        isEnd={this.isEnd(i, j)}
                                         movingStart={this.state.movingStart}
                                         movingEnd={this.state.movingEnd}
                                         handleOnMouseDown={this.handleOnMouseDown}
                                         handleOnMouseEnter={this.handleOnMouseEnter}
-                                    ></Node>
+                                    ></Cell>
                                 ))}
                             </div>
                         ))
