@@ -9,7 +9,7 @@ class Panel extends Component {
 
                 <Button
                     className="btn btn-primary"
-                    onClick={this.props.showHelp}
+                    onClick={this.props.toggleHelp}
                 >Help</Button>
 
                 <Button

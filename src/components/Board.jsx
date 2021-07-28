@@ -109,15 +109,9 @@ class Board extends Component {
         return grid;
     }
 
-    showHelp = () => {
+    toggleHelp = () => {
         this.setState({
-            showHelp: true
-        })
-    }
-
-    closeHelp = () => {
-        this.setState({
-            showHelp: false
+            showHelp: !this.state.showHelp
         })
     }
 
@@ -376,12 +370,12 @@ class Board extends Component {
                 className="board"
             >
                 <Help
-                    closeHelp={this.closeHelp}
+                    toggleHelp={this.toggleHelp}
                     show={this.state.showHelp}
                 ></Help>
 
                 <Panel
-                    showHelp={this.showHelp}
+                    toggleHelp={this.toggleHelp}
                     startSearching={this.startSearching}
                     reset={this.reset}
                 ></Panel>

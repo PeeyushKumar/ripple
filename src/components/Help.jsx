@@ -6,7 +6,7 @@ const Help = (props) => {
     return(
         <Modal
             show={props.show}
-            onHide={props.closeHelp}
+            onHide={props.toggleHelp}
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
@@ -30,7 +30,7 @@ const Help = (props) => {
             </Modal.Body>
             
             <Modal.Footer>
-                <Button onClick={props.closeHelp}>Close</Button>
+                <Button onClick={props.toggleHelp}>Close</Button>
             </Modal.Footer>
 
         </Modal>
