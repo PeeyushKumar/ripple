@@ -52,7 +52,7 @@ class Board extends Component {
 
         const ratio = width/height;
 
-        const noOfRows = Math.floor(height/37);
+        const noOfRows = Math.floor(height/45);
         const noOfCols = Math.floor(noOfRows*ratio);
 
 
