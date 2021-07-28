@@ -27,6 +27,18 @@ class Board extends Component {
             movingStart: false,
             movingEnd: false,   
         }
+
+        this.defaultCell = {
+            row: null,
+            col: null,
+            isStart: false,
+            isEnd: false,
+            isWall: false,
+            isVisited: false,
+            isPath: false,
+            parentRow: null,
+            parentCol: null,
+        }
     }
 
     componentDidMount = () => {
@@ -87,14 +99,23 @@ class Board extends Component {
         })
     } 
 
-    getGrid = () => this.state.grid.map(row => row.map(node => ({...node})));
-
     reset = () => {
         const {startRow, startCol, endRow, endCol} = this.state;
         this.createGrid(startRow, startCol, endRow, endCol);
     }
 
-    clearSearch = (grid) => grid.forEach(row => row.forEach(node => this.clearNode(grid, node.row, node.col)));
+    clearSearch = (grid) => {
+
+        const changes = {
+            isVisited: false,
+            isPath: false,
+            parentRow: null,
+            parentCol: null
+        }
+
+        grid = grid.map(cellRow => cellRow.map(cell => ({...cell, ...changes})));
+        return grid;
+    }
 
     showHelp = () => {
         this.setState({
@@ -217,39 +238,79 @@ class Board extends Component {
         makePath(grid, path, 1);
     }
 
+    changeCell = (grid, row, col, changes) => {
+        return grid.map((cellRow, i) => cellRow.map((cell, j) => ((i === row && j === col) ? {...cell, ...changes} : cell)));
+    }
+
     erazeNode = (grid, row, col) => {
-        this.clearNode(grid, row, col)
-        grid[row][col].isStart = false;
-        grid[row][col].isEnd = false;
-        grid[row][col].isWall = false;   
+
+        const changes = {
+            ...this.defaultCell,
+            row,
+            col
+        }
+
+        grid = this.changeCell(grid, row, col, changes)
+
+        return grid;
     }
 
     clearNode = (grid, row, col) => {
-        grid[row][col].isVisited = false;        
-        grid[row][col].isPath = false;
-        grid[row][col].parentRow = null;
-        grid[row][col].parentCol = null;
+
+        const changes = {
+            isVisited: false,
+            isPath: false,
+            parentRow: null,
+            parentCol: null
+        }
+
+        grid = this.changeCell(grid, row, col, changes);
+        return grid;
     }
 
     moveStart = (grid, row, col) => {
         const {startRow, startCol} = this.state;
 
-        this.erazeNode(grid, startRow, startCol);
-        this.erazeNode(grid, row, col);
-        grid[row][col].isStart = true;
+        grid = this.erazeNode(grid, startRow, startCol);
+
+        const changes = {
+            ...this.defaultCell,
+            row,
+            col,
+            isStart: true,
+        }
+
+        grid = this.changeCell(grid, row, col, changes);
+        return grid;
     }
 
     moveEnd = (grid, row, col) => {
         const {endRow, endCol} = this.state;
 
-        this.erazeNode(grid, endRow, endCol);
-        this.erazeNode(grid, row, col);
-        grid[row][col].isEnd = true;
+        grid = this.erazeNode(grid, endRow, endCol);
+
+        const changes = {
+            ...this.defaultCell,
+            row,
+            col,
+            isEnd: true,
+        }
+
+        grid = this.changeCell(grid, row, col, changes);
+        return grid;
     }
 
     makeWall = (grid, row, col) => {
-        this.erazeNode(grid, row, col);
-        grid[row][col].isWall = true;
+        
+        const changes = {
+            ...this.defaultCell,
+            row,
+            col,
+            isWall: true
+        }
+        
+        grid = this.changeCell(grid, row, col, changes);
+        return grid;
     }
 
     handleOnMouseUp = () => {
@@ -262,8 +323,7 @@ class Board extends Component {
     }
 
     handleOnMouseDown = (row, col) => {
-        let {drawingWall, erazingWall, movingStart, movingEnd} = this.state;
-        const grid = this.getGrid();
+        let {grid, drawingWall, erazingWall, movingStart, movingEnd} = this.state;
 
         if (grid[row][col].isStart) {
             if (!drawingWall && !erazingWall && !movingEnd) {
@@ -279,19 +339,19 @@ class Board extends Component {
 
         else if (grid[row][col].isWall) {
             if (!drawingWall && !movingStart && !movingEnd) {
-                this.erazeNode(grid, row, col);
+                grid = this.erazeNode(grid, row, col);
                 erazingWall = true;
             }
         }
 
         else {
             if (!erazingWall && !movingStart && !movingEnd) {
-                this.makeWall(grid, row, col)
+                grid = this.makeWall(grid, row, col)
                 drawingWall = true;
             }
         }
 
-        this.clearSearch(grid)
+        grid = this.clearSearch(grid);
 
         this.setState({
             grid,
@@ -306,28 +366,27 @@ class Board extends Component {
 
     handleOnMouseEnter = (row, col) => {
 
-        let {startRow, startCol, endRow, endCol, movingStart, movingEnd, drawingWall, erazingWall} = this.state; 
-        const grid = this.getGrid();
+        let {grid, startRow, startCol, endRow, endCol, movingStart, movingEnd, drawingWall, erazingWall} = this.state; 
         
         if (grid[row][col].isStart || grid[row][col].isEnd) return;
 
         else if (grid[row][col].isWall) {
-            if (erazingWall) this.erazeNode(grid, row, col);
+            if (erazingWall) grid = this.erazeNode(grid, row, col);
         }
 
         else if (movingStart) {
-            this.moveStart(grid, row, col);
+            grid = this.moveStart(grid, row, col);
             startRow = row;
             startCol = col;
         }
 
         else if (movingEnd) {
-            this.moveEnd(grid, row, col);
+            grid = this.moveEnd(grid, row, col);
             endRow = row;
             endCol = col;
         }
 
-        else if (drawingWall) this.makeWall(grid, row, col);
+        else if (drawingWall) grid = this.makeWall(grid, row, col);
 
         this.setState({
             grid,
