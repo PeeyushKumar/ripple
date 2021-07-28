@@ -31,8 +31,6 @@ class Board extends Component {
         this.defaultCell = {
             row: null,
             col: null,
-            isStart: false,
-            isEnd: false,
             isWall: false,
             isVisited: false,
             isPath: false,
@@ -73,8 +71,6 @@ class Board extends Component {
                 const node = {
                     row: rowIdx,
                     col: nodeIdx,
-                    isStart: rowIdx === startRow && nodeIdx === startCol,
-                    isEnd: rowIdx === endRow && nodeIdx === endCol,
                     isWall: false,
                     isVisited: false,
                     isPath: false,
@@ -135,6 +131,18 @@ class Board extends Component {
         return (row >= 0 && row < noOfRows && col >= 0 && col < noOfCols)
     }
 
+    isStart = (row, col) => {
+        const {startRow, startCol} = this.state;
+
+        return (row === startRow && col === startCol);
+    }
+
+    isEnd = (row, col) => {
+        const {endRow, endCol} = this.state;
+
+        return (row === endRow && col === endCol);
+    }
+
     startSearching = () => {
         const {grid, startRow, startCol} = this.state;
 
@@ -153,7 +161,7 @@ class Board extends Component {
 
         const currentNode = grid[fromRow][fromCol];
 
-        if (currentNode.isEnd) {
+        if (this.isEnd(currentNode.row, currentNode.col)) {
             currentNode.parentRow = parentRow;
             currentNode.parentCol = parentCol;
             grid[fromRow][fromCol] = currentNode;
@@ -201,7 +209,7 @@ class Board extends Component {
     track = (row, col) => {
         const {grid} = this.state;
         const path = []
-        while (!grid[row][col].isStart) {
+        while (!this.isStart(row, col)) {
             const parentRow = grid[row][col].parentRow;
             const parentCol = grid[row][col].parentCol;
             row = parentRow;
@@ -268,38 +276,6 @@ class Board extends Component {
         return grid;
     }
 
-    moveStart = (grid, row, col) => {
-        const {startRow, startCol} = this.state;
-
-        grid = this.erazeNode(grid, startRow, startCol);
-
-        const changes = {
-            ...this.defaultCell,
-            row,
-            col,
-            isStart: true,
-        }
-
-        grid = this.changeCell(grid, row, col, changes);
-        return grid;
-    }
-
-    moveEnd = (grid, row, col) => {
-        const {endRow, endCol} = this.state;
-
-        grid = this.erazeNode(grid, endRow, endCol);
-
-        const changes = {
-            ...this.defaultCell,
-            row,
-            col,
-            isEnd: true,
-        }
-
-        grid = this.changeCell(grid, row, col, changes);
-        return grid;
-    }
-
     makeWall = (grid, row, col) => {
         
         const changes = {
@@ -325,13 +301,13 @@ class Board extends Component {
     handleOnMouseDown = (row, col) => {
         let {grid, drawingWall, erazingWall, movingStart, movingEnd} = this.state;
 
-        if (grid[row][col].isStart) {
+        if (this.isStart(row, col)) {
             if (!drawingWall && !erazingWall && !movingEnd) {
                 movingStart = true;
             }  
         }
 
-        else if (grid[row][col].isEnd) {
+        else if (this.isEnd(row, col)) {
             if (!drawingWall && !erazingWall && !movingStart) {
                 movingEnd = true;
             }
@@ -368,20 +344,18 @@ class Board extends Component {
 
         let {grid, startRow, startCol, endRow, endCol, movingStart, movingEnd, drawingWall, erazingWall} = this.state; 
         
-        if (grid[row][col].isStart || grid[row][col].isEnd) return;
+        if (this.isStart(row, col) || this.isEnd(row, col)) return;
 
         else if (grid[row][col].isWall) {
             if (erazingWall) grid = this.erazeNode(grid, row, col);
         }
 
         else if (movingStart) {
-            grid = this.moveStart(grid, row, col);
             startRow = row;
             startCol = col;
         }
 
         else if (movingEnd) {
-            grid = this.moveEnd(grid, row, col);
             endRow = row;
             endCol = col;
         }
@@ -428,6 +402,8 @@ class Board extends Component {
                                     <Node
                                         {...node}
                                         key={nodeIdx}
+                                        isStart={this.isStart(rowIdx, nodeIdx)}
+                                        isEnd={this.isEnd(rowIdx, nodeIdx)}
                                         movingStart={this.state.movingStart}
                                         movingEnd={this.state.movingEnd}
                                         handleOnMouseDown={this.handleOnMouseDown}
