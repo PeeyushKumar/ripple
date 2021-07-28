@@ -42,7 +42,7 @@ html {
 .cell-visited {
   border: 1px solid #6bdcff;
   opacity: 0.6;
-  animation: balloon 2s ease forwards;
+  animation: balloon 1.5s ease forwards;
 }
 
 @keyframes balloon {
@@ -59,8 +59,8 @@ html {
   }
 
   30% {
-    height: 120%;
-    width: 120%;
+    height: 130%;
+    width: 130%;
     margin: -15%;
     border-radius: 15px;
     background-color: #0062ff;
